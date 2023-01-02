@@ -94,11 +94,6 @@ pub struct BoxBundle {
     sprite_bundle: SpriteSheetBundle
 }
 
-pub fn update_transform(coords: &GridCoords, transform: &mut Transform) {
-    transform.translation.x = coords.x as f32 * 256.0 + 128.0;
-    transform.translation.y = coords.y as f32 * 256.0 + 128.0;
-}
-
 #[derive(Default, Component, Debug, Clone, Copy, PartialEq)]
 pub enum TimeMachinePartType {
     TopLeftFull,
