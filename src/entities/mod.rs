@@ -2,9 +2,6 @@
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 
-pub mod update_entities;
-pub use update_entities::*;
-
 #[derive(Default, Component)]
 pub struct Player;
 

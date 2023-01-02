@@ -24,7 +24,9 @@ fn main() {
     App::new()
         .add_plugins(default_plugins)
         .add_plugin(LdtkPlugin)
+
         .add_plugin(LevelSetupPlugin)
+        .add_plugin(TickUpdatePlugin)
 
         .insert_resource(Dims {x: 0, y: 0})
         .insert_resource(Grid::new())
@@ -44,7 +46,6 @@ fn main() {
             SystemSet::on_enter(AppState::InGame)
             .with_system(setup)
         )
-        // .add_system(player_movement)
         .add_system(close_on_esc)
         .add_state(AppState::InGame) // Change later
         .run();
@@ -52,11 +53,11 @@ fn main() {
 
 pub mod setup;
 pub mod entities;
-pub mod movement;
+pub mod tick_update_plugin;
 pub mod resources;
 
 pub mod prelude {
     pub use super::{
-        setup::*, entities::*, movement::*, resources::*
+        setup::*, entities::*, tick_update_plugin::*, resources::*
     };
 }

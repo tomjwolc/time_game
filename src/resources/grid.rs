@@ -25,6 +25,14 @@ impl GridEntity {
         if let GridEntity::TimeMachine { .. } = self { true } else { false }
     }
     
+    fn is_pushable(&self) -> bool {
+        match self {
+            GridEntity::TimeMachine { .. } => false,
+            GridEntity::None { .. } => false,
+            _ => true
+        }
+    }
+
     pub fn try_add_part_to_grid(&mut self, x: usize, y: usize, opt_part_type: Option<&TimeMachinePartType>) {
         match (self, opt_part_type) {
             (
@@ -146,6 +154,22 @@ impl Grid {
             None
         }
     }
+    
+    pub fn get_entity_from_pos<'a>(&'a self, x: usize, y: usize) -> Option<&'a ((usize, usize), GridEntity)> {
+        if x < self.width() && y < self.height() {
+            Some(&self.entities[self.entity_grid[x][y]])
+        } else {
+            None
+        }
+    }
+
+    pub fn get_entity_from_pos_mut<'a>(&'a mut self, x: usize, y: usize) -> Option<&'a mut ((usize, usize), GridEntity)> {
+        if x < self.width() && y < self.height() {
+            Some(&mut self.entities[self.entity_grid[x][y]])
+        } else {
+            None
+        }
+    }
 
     fn get_entity_index(&self, grid_entity_info: &GridEntityInfo) -> Option<usize> {
         self.entities.iter().position(|(_, grid_entity)| {
@@ -204,6 +228,41 @@ impl Grid {
             );
 
             *current_index = index;
+        }
+    }
+
+    pub fn try_move(&mut self, entity_index: usize, direction: MoveDirection) -> bool {
+        let (x1, y1) = self.entities[entity_index].0;
+
+        let (x2, y2) = match direction.get_changed_pos(&(x1, y1), self.width(), self.height()) {
+            Some((x, y)) => (x, y),
+            None => return false
+        };
+
+        if ( 
+            self.entity_grid[ x1 ][ y1 ] == entity_index &&
+            self.entity_grid[ x2 ][ y2 ] == 0
+        ) || (
+            self.entity_grid[ x1 ][ y1 ] == entity_index &&
+            self.get_entity_from_pos(x2, y2).unwrap().1.is_pushable() &&
+            self.try_move(self.entity_grid[ x2 ][ y2 ], direction)
+        ) {
+            self.entity_grid[ x1 ][ y1 ] = 0;
+            self.entity_grid[ x2 ][ y2 ] = entity_index;
+
+            self.entities[entity_index].0 = (x2, y2);
+
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn try_move_entity(&mut self, grid_entity_info: &GridEntityInfo, direction: MoveDirection) -> bool {
+        if let Some(index) = self.get_entity_index(grid_entity_info) {
+            self.try_move(index, direction)
+        } else {
+            false
         }
     }
 }
