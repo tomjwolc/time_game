@@ -1,6 +1,6 @@
 use bevy::{prelude::*, window::close_on_esc};
 use bevy_ecs_ldtk::prelude::*;
-use iyes_loopless::prelude::*;
+// use iyes_loopless::prelude::*;
 use crate::prelude::*;
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
@@ -26,9 +26,8 @@ fn main() {
         .add_plugin(LdtkPlugin)
         .add_plugin(LevelSetupPlugin)
 
-        .insert_resource(MasterTimeline(Vec::new()))
-        .insert_resource(T(0))
-        .insert_resource(EntityGrid(Vec::new()))
+        .insert_resource(Dims {x: 0, y: 0})
+        .insert_resource(Grid::new())
 
         .insert_resource(ClearColor(Color::hex("1E2B39").unwrap()))
         .insert_resource(LevelSelection::Index(0))
@@ -37,6 +36,7 @@ fn main() {
             ..Default::default()
         })
         .register_ldtk_entity::<PlayerBundle>("Player")
+        .register_ldtk_entity::<PastPlayerBundle>("PastPlayer")
         .register_ldtk_entity::<BoxBundle>("Box")
         .register_ldtk_entity::<TimeMachinePartBundle>("Time_machine_part")
 
@@ -44,7 +44,7 @@ fn main() {
             SystemSet::on_enter(AppState::InGame)
             .with_system(setup)
         )
-        .add_system(player_movement)
+        // .add_system(player_movement)
         .add_system(close_on_esc)
         .add_state(AppState::InGame) // Change later
         .run();

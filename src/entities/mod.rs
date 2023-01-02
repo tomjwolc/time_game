@@ -2,8 +2,14 @@
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 
+pub mod update_entities;
+pub use update_entities::*;
+
 #[derive(Default, Component)]
 pub struct Player;
+
+#[derive(Default, Component)]
+pub struct PastPlayer;
 
 #[derive(Default, Component)]
 pub struct Box;
@@ -11,9 +17,64 @@ pub struct Box;
 #[derive(Default, Component)]
 pub struct TimeMachine;
 
+#[derive(Default, Component, Debug)]
+pub struct GridEntityInfo {
+    pub variant: &'static str,
+    pub id: usize,
+    pub pos: (usize, usize)
+}
+
+impl GridEntityInfo {
+    fn player(_: EntityInstance) -> Self {
+        Self {
+            variant: "Player",
+            id: 0,
+            pos: (0, 0)
+        }
+    }
+
+    fn past_player(_: EntityInstance) -> Self {
+        Self {
+            variant: "PastPlayer",
+            id: 0, // to be changed later
+            pos: (0, 0)
+        }
+    }
+
+    fn box_entity(_: EntityInstance) -> Self {
+        Self {
+            variant: "Box",
+            id: 0, // to be changed later
+            pos: (0, 0)
+        }
+    }
+
+    fn time_machine(_: EntityInstance) -> Self {
+        Self {
+            variant: "TimeMachine",
+            id: 0, // to be changed later
+            pos: (0, 0) // to be changed later
+        }
+    }
+}
+
 #[derive(Bundle, LdtkEntity)]
 pub struct PlayerBundle {
     component: Player,
+    #[with(GridEntityInfo::player)]
+    grid_entity: GridEntityInfo,
+    #[grid_coords]
+    position: GridCoords,
+    #[sprite_sheet_bundle]
+    #[bundle]
+    sprite_bundle: SpriteSheetBundle
+}
+
+#[derive(Bundle, LdtkEntity)]
+pub struct PastPlayerBundle {
+    component: PastPlayer,
+    #[with(GridEntityInfo::past_player)]
+    grid_entity: GridEntityInfo,
     #[grid_coords]
     position: GridCoords,
     #[sprite_sheet_bundle]
@@ -24,6 +85,8 @@ pub struct PlayerBundle {
 #[derive(Bundle, LdtkEntity)]
 pub struct BoxBundle {
     component: Box,
+    #[with(GridEntityInfo::box_entity)]
+    grid_entity: GridEntityInfo,
     #[grid_coords]
     position: GridCoords,
     #[sprite_sheet_bundle]
@@ -513,6 +576,110 @@ impl TimeMachinePartType {
             (_, _) => false
         }
     }
+
+
+    pub fn can_enter_exit_top(&self) -> bool {
+        match self {
+            TimeMachinePartType::TopLeftFull |
+            TimeMachinePartType::TopRightFull |
+            TimeMachinePartType::TopFull |
+
+            TimeMachinePartType::TopTangentLeft |
+            TimeMachinePartType::TopTangentRight |
+            TimeMachinePartType::TopPerpLeft |
+            TimeMachinePartType::TopPerpRight |
+
+            TimeMachinePartType::LeftOpening |
+            TimeMachinePartType::BottomOpening |
+            TimeMachinePartType::RightOpening |
+
+            TimeMachinePartType::TopLeftTangentRight |
+            TimeMachinePartType::TopLeftTangentBottom |
+            TimeMachinePartType::TopRightTangentLeft |
+            TimeMachinePartType::TopRightTangentBottom => false,
+            _ => true
+        }
+    }
+
+    pub fn can_enter_exit_bottom(&self) -> bool {
+        match self {
+            TimeMachinePartType::BottomLeftFull |
+            TimeMachinePartType::BottomRightFull |
+            TimeMachinePartType::BottomFull |
+
+            TimeMachinePartType::BottomTangentLeft |
+            TimeMachinePartType::BottomTangentRight |
+            TimeMachinePartType::BottomPerpLeft |
+            TimeMachinePartType::BottomPerpRight |
+
+            TimeMachinePartType::LeftOpening |
+            TimeMachinePartType::TopOpening |
+            TimeMachinePartType::RightOpening |
+
+            TimeMachinePartType::BottomLeftTangentRight |
+            TimeMachinePartType::BottomLeftTangentTop |
+            TimeMachinePartType::BottomRightTangentLeft |
+            TimeMachinePartType::BottomRightTangentTop => false,
+            _ => true
+        }
+    }
+
+    pub fn can_enter_exit_left(&self) -> bool {
+        match self {
+            TimeMachinePartType::TopLeftFull |
+            TimeMachinePartType::BottomLeftFull |
+            TimeMachinePartType::LeftFull |
+
+            TimeMachinePartType::LeftTangentTop |
+            TimeMachinePartType::LeftTangentBottom |
+            TimeMachinePartType::LeftPerpTop |
+            TimeMachinePartType::LeftPerpBottom |
+
+            TimeMachinePartType::TopOpening |
+            TimeMachinePartType::BottomOpening |
+            TimeMachinePartType::RightOpening |
+
+            TimeMachinePartType::TopLeftTangentRight |
+            TimeMachinePartType::TopLeftTangentBottom |
+            TimeMachinePartType::BottomLeftTangentRight |
+            TimeMachinePartType::BottomLeftTangentTop => false,
+            _ => true
+        }
+    }
+
+    pub fn can_enter_exit_right(&self) -> bool {
+        match self {
+            TimeMachinePartType::TopRightFull |
+            TimeMachinePartType::BottomRightFull |
+            TimeMachinePartType::RightFull |
+
+            TimeMachinePartType::RightTangentTop |
+            TimeMachinePartType::RightTangentBottom |
+            TimeMachinePartType::RightPerpTop |
+            TimeMachinePartType::RightPerpBottom |
+
+            TimeMachinePartType::TopOpening |
+            TimeMachinePartType::BottomOpening |
+            TimeMachinePartType::LeftOpening |
+
+            TimeMachinePartType::TopRightTangentLeft |
+            TimeMachinePartType::TopRightTangentBottom |
+            TimeMachinePartType::BottomRightTangentLeft |
+            TimeMachinePartType::BottomRightTangentTop => false,
+            _ => true
+        }
+    }
+
+    pub fn get_type(entity_instance: EntityInstance) -> Self {
+        entity_instance
+            .field_instances[0]
+            .real_editor_values[0]
+            .as_ref().unwrap()
+            .get("params").unwrap()
+            .get(0).unwrap()
+            .as_str().unwrap()
+            .parse().unwrap()
+    }
 }
 
 impl std::str::FromStr for TimeMachinePartType {
@@ -576,11 +743,20 @@ pub struct TimeMachineId(pub usize);
 
 #[derive(Bundle, LdtkEntity)]
 pub struct TimeMachinePartBundle {
+    #[with(TimeMachinePartType::get_type)]
     part_type: TimeMachinePartType,
-    id: TimeMachineId,
+    #[with(GridEntityInfo::time_machine)]
+    grid_entity: GridEntityInfo,
+    size: TimeMachineGrid,
     #[grid_coords]
     position: GridCoords,
     #[sprite_sheet_bundle]
     #[bundle]
     sprite_bundle: SpriteSheetBundle
+}
+
+#[derive(Default, Component)]
+pub struct TimeMachineGrid {
+    pub id: usize,
+    pub grid: Vec<Vec<(TimeMachinePartType, usize)>>
 }

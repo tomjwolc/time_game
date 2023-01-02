@@ -1,5 +1,6 @@
 use super::*;
 use iyes_loopless::prelude::*;
+use std::collections::HashMap;
 
 // Until I figure out how to make the setup fns only activate once
 #[derive(Resource)]
@@ -11,7 +12,7 @@ impl Plugin for LevelSetupPlugin {
     fn build(&self, app: &mut App) {
         app
             .insert_resource(LevelSetupCompleted(false))
-            .add_system(end_level_setup.run_if(level_setup_ready).label("end_level_setup"))
+            .add_system(set_dims.run_if(level_setup_ready).before("pre_grid_setup"))
             .add_system_set(
                 ConditionSet::new()
                 .run_if(level_setup_ready)
@@ -20,12 +21,18 @@ impl Plugin for LevelSetupPlugin {
                 .with_system(setup_time_machine_parts)
                 .with_system(resize_level)
                 .into()
-            ).add_system(
-                setup_entity_grid
+            )/*.add_system(
+                setup_time_machine_grid
+                .run_if(level_setup_ready)
+                .after("pre_grid_setup")
+            )*/.add_system(
+                setup_grid
                 .run_if(level_setup_ready)
                 .after("pre_grid_setup")
                 .before("end_level_setup")
+                .label("grid_setup")
             )
+            .add_system(end_level_setup.run_if(level_setup_ready).label("end_level_setup"))
         ;
     }
 }
@@ -37,26 +44,92 @@ fn level_setup_ready(
     ldtk_level_query.get_single().is_ok() && !level_setup_completed.0
 }
 
-fn setup_time_machine_parts(
+fn set_dims(
     ldtk_level: Res<Assets<LdtkLevel>>,
     ldtk_level_query: Query<&Handle<LdtkLevel>>,
-    mut time_machine_parts_query: Query<(&mut TimeMachinePartType, &mut TimeMachineId)>
+    mut dims: ResMut<Dims>
 ) {
     let level = &ldtk_level.get(ldtk_level_query.single()).unwrap().level;
-    let ldtk_time_machine_entities = &level.layer_instances.as_ref().expect("")[1].entity_instances;
 
-    for (i, (mut part_type, mut id)) in time_machine_parts_query.iter_mut().enumerate() {
-        let enum_varient_string = ldtk_time_machine_entities[i]
-            .field_instances[0]
-            .real_editor_values[0]
-            .as_ref().unwrap()
-            .get("params").unwrap()
-            .get(0).unwrap()
-            .as_str().unwrap();
+    dims.x = (level.px_wid / 256) as usize;
+    dims.y = (level.px_hei / 256) as usize;
+}
 
-        *part_type = enum_varient_string.parse().unwrap();
-        id.0 = 0; // updated correctly after setup entity grid
+fn setup_time_machine_parts(
+    mut time_machine_parts_query: Query<(
+        &mut GridEntityInfo, 
+        &TimeMachinePartType, 
+        &GridCoords
+    )>,
+    dims: Res<Dims>
+) {
+    let mut time_machine_part_grid: Vec<Vec<Option<(usize, TimeMachinePartType)>>> = vec![vec![None; dims.y]; dims.x];
+
+    for (_, part_type, coords) in time_machine_parts_query.iter() {
+        time_machine_part_grid[coords.x as usize][coords.y as usize] = Some((
+            0,
+            *part_type
+        ));
     }
+
+    let mut id = 1;
+
+    let mut sorted_time_machine_parts: Vec<(
+        Mut<GridEntityInfo>, 
+        &TimeMachinePartType, 
+        &GridCoords
+    )> = time_machine_parts_query.iter_mut().collect();
+
+    sorted_time_machine_parts.sort_by(|(_, _, coords1), (_, _, coords2)| {
+        match coords1.x.partial_cmp(&coords2.x).unwrap() {
+            std::cmp::Ordering::Equal => coords1.y.partial_cmp(&coords2.y).unwrap(),
+            ordering => ordering 
+        }
+    });
+
+    let mut corner_map: HashMap<usize, GridCoords> = HashMap::new();
+
+    for (mut grid_entity, _, coords) in sorted_time_machine_parts {
+        if time_machine_part_grid[coords.x as usize][coords.y as usize].unwrap().0 == 0 {
+            expand_connections(coords.x as usize, coords.y as usize, &mut time_machine_part_grid, id);
+            corner_map.insert(id, *coords);
+
+            id += 1;
+        }
+
+        grid_entity.id = time_machine_part_grid[coords.x as usize][coords.y as usize].unwrap().0;
+        let corner = corner_map.get(&grid_entity.id).unwrap();
+        grid_entity.pos = (
+            (coords.x - corner.x) as usize,
+            (coords.y - corner.y) as usize
+        )
+    }
+}
+
+fn expand_connections(x: usize, y: usize, grid: &mut Vec<Vec<Option<(usize, TimeMachinePartType)>>>, expanding_id: usize) {
+    // println!("[{}]: Expanding connections at ({}, {})", expanding_id, x, y);
+
+    if let Some((id, part_type)) = grid[x][y] { if id == 0 {
+        grid[x][y].as_mut().unwrap().0 = expanding_id;
+
+        // println!("[{}]: {:?}", expanding_id, grid[x][y]);
+
+        if x > 0 && grid[ x-1 ][ y ].is_some() && part_type.fits_on_left(&grid[ x-1 ][ y ].unwrap().1) {
+            expand_connections(x - 1, y, grid, expanding_id);
+        }
+
+        if x < grid.len() - 1 && grid[ x+1 ][ y ].is_some() && part_type.fits_on_right(&grid[ x+1 ][ y ].unwrap().1) {
+            expand_connections(x + 1, y, grid, expanding_id);
+        }
+
+        if y > 0 && grid[ x ][ y-1 ].is_some() && part_type.fits_on_bottom(&grid[ x ][ y-1 ].unwrap().1) {
+            expand_connections(x, y - 1, grid, expanding_id);
+        }
+
+        if y < grid[0].len() - 1 && grid[ x ][ y+1 ].is_some() && part_type.fits_on_top(&grid[ x ][ y+1 ].unwrap().1) {
+            expand_connections(x, y + 1, grid, expanding_id);
+        }
+    }}
 }
 
 fn resize_level(
@@ -73,86 +146,81 @@ fn resize_level(
     transform.translation -= scaling_factor * Vec3::new(level.px_wid as f32, level.px_hei as f32, 0.0) / 2.0;
 }
 
-fn setup_entity_grid(
-    // Assets handle for the LdtkLevel resource
-    ldtk_level: Res<Assets<LdtkLevel>>,
-    // Query for the LdtkLevel handle
-    ldtk_level_query: Query<&Handle<LdtkLevel>>,
-    // Mutable reference to the EntityGrid resource
-    mut grid: ResMut<EntityGrid>,
-    // Query for the GridCoords component of entities with the Player component
-    player_query: Query<&GridCoords, With<Player>>,
-    // Query for the GridCoords component of entities with the Box component
-    box_query: Query<&GridCoords, With<Box>>,
-    // Query for the GridCoords and TimeMachinePartType components of entities
-    time_machine_parts_query: Query<(&GridCoords, &TimeMachinePartType)>
+// fn setup_time_machine_grid(
+//     dims: Res<Dims>,
+//     mut grid: ResMut<Grid>,
+//     mut tm_grid_entities: Query<(&mut GridEntityInfo, &GridCoords, &Time)>
+// ) {
+//     *grid = Grid::new_sized(dims.x, dims.y);
+
+// }
+
+fn setup_grid(
+    dims: Res<Dims>,
+    mut grid: ResMut<Grid>,
+    mut grid_entities: Query<(&mut GridEntityInfo, &GridCoords, Option<&TimeMachinePartType>)>,
 ) {
-    // Get the LdtkLevel resource
-    let level = &ldtk_level.get(ldtk_level_query.single()).unwrap().level;
+    *grid = Grid::new_sized(dims.x, dims.y);
 
-    // Initialize the EntityGrid with the dimensions of the LdtkLevel
-    grid.0 = vec![vec![GridState::Nothing; (level.px_wid / 256) as usize]; (level.px_hei / 256) as usize];
+    for (i, (mut grid_entity, coords, optional_part_type)) in grid_entities.iter_mut().enumerate() {
+        if grid_entity.id == 0 { grid_entity.id = i };
 
-    // Get the GridCoords of the entity with the Player component
-    let player_coords = player_query.single();
-    // Update the EntityGrid with the Player's position
-    grid.0[player_coords.y as usize][player_coords.x as usize] = GridState::Player;
+        let entity_index = grid.entity_grid[coords.x as usize][coords.y as usize];
+        let grid_entity_len = grid.entities.len();
 
-    // Iterate over the entities with the Box component and update the EntityGrid with their positions
-    for box_coords in box_query.iter() {
-        grid.0[box_coords.y as usize][box_coords.x as usize] = GridState::Box;
-    }
+        if entity_index == 0 {
+            grid.add_entity_to_pos(
+                coords.x as usize,
+                coords.y as usize,
+                grid_entity.variant,
+                grid_entity.id,
+            );
+        } 
+        
+        if let (corner, GridEntity::TimeMachine { grid: tm_grid, .. }) = &mut grid.entities[entity_index] {
+            tm_grid[coords.x as usize - corner.0][coords.y as usize - corner.1].1 = grid_entity_len;
+        }
 
-    // Iterate over the entities with the TimeMachinePartType component and update the EntityGrid with their positions
-    for (time_machine_coords, part_type) in time_machine_parts_query.iter() {
-        grid.0[time_machine_coords.y as usize][time_machine_coords.x as usize] = GridState::TimeMachine(0, *part_type);
-    }  
+        grid.add_entity(
+            coords.x as usize,
+            coords.y as usize,
+            grid_entity.variant,
+            grid_entity.id
+        );
 
-    let mut id = 1;
+        if let Some((corner, GridEntity::TimeMachine { grid: tm_grid, .. })) = grid.get_entity_mut(grid_entity.variant, grid_entity.id) {
+            if grid_entity.pos == (0, 0) {
+                *corner = (coords.x as usize, coords.y as usize)
+            }
 
-    for (coords, _) in time_machine_parts_query.iter() {
-        if let GridState::TimeMachine(0, _) = grid.0[coords.y as usize][coords.x as usize] {
-            expand_connections(coords.y as usize, coords.x as usize, &mut grid.0, id);
+            while tm_grid.len() <= grid_entity.pos.0 {
+                tm_grid.push(Vec::new());
+            }
 
-            id += 1;
+            while tm_grid[grid_entity.pos.0].len() <= grid_entity.pos.1 {
+                tm_grid[grid_entity.pos.0].push((TimeMachinePartType::Middle, 0));
+            }
+
+            tm_grid[grid_entity.pos.0][grid_entity.pos.1] = (
+                *optional_part_type.unwrap(),
+                0
+            );
         }
     }
 
-    print_vector_of_vectors(grid.0.clone());
+    // print_vector_of_vectors(&grid.entities);
+
+    // print_vector_of_vectors(&grid.entity_grid);
 }
-use std::fmt::Debug;
+// use std::fmt::Debug;
 
-fn print_vector_of_vectors<T: Debug>(vv: Vec<Vec<T>>) {
-    println!("[");
-    for v in vv {
-        println!("    {v:?},");
-    }
-    println!("]");
-}
-
-fn expand_connections(x: usize, y: usize, grid: &mut Vec<Vec<GridState>>, expanding_id: usize) {
-    if let GridState::TimeMachine(id, _) = &mut grid[x][y] { *id = expanding_id; }
-
-    if let GridState::TimeMachine(id, part_type) = grid[x][y] {
-        if id == 0 {
-            if x > 0 && grid[x - 1][y].is_tm() && part_type.fits_on_right(grid[x - 1][y].to_tm().unwrap().1) {
-                expand_connections(x - 1, y, grid, expanding_id);
-            }
-
-            if x < grid[0].len() && grid[x + 1][y].is_tm() && part_type.fits_on_left(grid[x + 1][y].to_tm().unwrap().1)  {
-                expand_connections(x + 1, y, grid, expanding_id);
-            }
-
-            if y > 0 && grid[x][y - 1].is_tm() && part_type.fits_on_top(grid[x][y - 1].to_tm().unwrap().1)  {
-                expand_connections(x, y - 1, grid, expanding_id);
-            }
-
-            if y < grid.len() && grid[x][y + 1].is_tm() && part_type.fits_on_bottom(grid[x][y + 1].to_tm().unwrap().1)  {
-                expand_connections(x, y + 1, grid, expanding_id);
-            }
-        }
-    }
-}
+// fn print_vector_of_vectors<T: Debug>(vv: &Vec<T>) {
+//     println!("[");
+//     for v in vv {
+//         println!("    {v:?},");
+//     }
+//     println!("]");
+// }
 
 fn end_level_setup(mut level_setup_completed: ResMut<LevelSetupCompleted>) {
     level_setup_completed.0 = true;
