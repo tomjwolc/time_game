@@ -146,15 +146,6 @@ fn resize_level(
     transform.translation -= scaling_factor * Vec3::new(level.px_wid as f32, level.px_hei as f32, 0.0) / 2.0;
 }
 
-// fn setup_time_machine_grid(
-//     dims: Res<Dims>,
-//     mut grid: ResMut<Grid>,
-//     mut tm_grid_entities: Query<(&mut GridEntityInfo, &GridCoords, &Time)>
-// ) {
-//     *grid = Grid::new_sized(dims.x, dims.y);
-
-// }
-
 fn setup_grid(
     dims: Res<Dims>,
     mut grid: ResMut<Grid>,

@@ -792,16 +792,9 @@ pub struct TimeMachinePartBundle {
     part_type: TimeMachinePartType,
     #[with(GridEntityInfo::time_machine)]
     grid_entity: GridEntityInfo,
-    size: TimeMachineGrid,
     #[grid_coords]
     position: GridCoords,
     #[sprite_sheet_bundle]
     #[bundle]
     sprite_bundle: SpriteSheetBundle
-}
-
-#[derive(Default, Component)]
-pub struct TimeMachineGrid {
-    pub id: usize,
-    pub grid: Vec<Vec<(TimeMachinePartType, usize)>>
 }
