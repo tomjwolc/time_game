@@ -162,65 +162,34 @@ fn setup_grid(
 ) {
     *grid = Grid::new_sized(dims.x, dims.y);
 
-    for (i, (mut grid_entity, coords, optional_part_type)) in grid_entities.iter_mut().enumerate() {
-        if grid_entity.id == 0 { grid_entity.id = i };
+    for (i, (mut grid_entity_info, coords, opt_part_type)) in grid_entities.iter_mut().enumerate() {
+        if grid_entity_info.id == 0 { grid_entity_info.id = i };
 
-        let entity_index = grid.entity_grid[coords.x as usize][coords.y as usize];
-        let grid_entity_len = grid.entities.len();
-
-        if entity_index == 0 {
-            grid.add_entity_to_pos(
-                coords.x as usize,
-                coords.y as usize,
-                grid_entity.variant,
-                grid_entity.id,
-            );
-        } 
-        
-        if let (corner, GridEntity::TimeMachine { grid: tm_grid, .. }) = &mut grid.entities[entity_index] {
-            tm_grid[coords.x as usize - corner.0][coords.y as usize - corner.1].1 = grid_entity_len;
-        }
-
-        grid.add_entity(
+        grid.add_entity_to_pos(
             coords.x as usize,
             coords.y as usize,
-            grid_entity.variant,
-            grid_entity.id
+            grid_entity_info.variant,
+            grid_entity_info.id,
         );
 
-        if let Some((corner, GridEntity::TimeMachine { grid: tm_grid, .. })) = grid.get_entity_mut(grid_entity.variant, grid_entity.id) {
-            if grid_entity.pos == (0, 0) {
-                *corner = (coords.x as usize, coords.y as usize)
-            }
+        let (corner, entity) = grid.get_entity_from_coords_mut(&coords).unwrap();
 
-            while tm_grid.len() <= grid_entity.pos.0 {
-                tm_grid.push(Vec::new());
-            }
-
-            while tm_grid[grid_entity.pos.0].len() <= grid_entity.pos.1 {
-                tm_grid[grid_entity.pos.0].push((TimeMachinePartType::Middle, 0));
-            }
-
-            tm_grid[grid_entity.pos.0][grid_entity.pos.1] = (
-                *optional_part_type.unwrap(),
-                0
-            );
+        if grid_entity_info.pos == (0, 0) {
+            *corner = (
+                coords.x as usize,
+                coords.y as usize
+            )
         }
+
+        entity.try_add_part_to_grid(
+            grid_entity_info.pos.0,
+            grid_entity_info.pos.1,
+            opt_part_type
+        );
     }
 
-    // print_vector_of_vectors(&grid.entities);
-
-    // print_vector_of_vectors(&grid.entity_grid);
+    println!("{}", *grid);
 }
-// use std::fmt::Debug;
-
-// fn print_vector_of_vectors<T: Debug>(vv: &Vec<T>) {
-//     println!("[");
-//     for v in vv {
-//         println!("    {v:?},");
-//     }
-//     println!("]");
-// }
 
 fn end_level_setup(mut level_setup_completed: ResMut<LevelSetupCompleted>) {
     level_setup_completed.0 = true;

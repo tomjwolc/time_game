@@ -153,6 +153,51 @@ pub enum TimeMachinePartType {
 }
 
 impl TimeMachinePartType {
+    pub fn to_num(&self) -> usize {
+        match self {TimeMachinePartType::TopLeftFull => 0,
+            TimeMachinePartType::TopRightFull => 1,
+            TimeMachinePartType::BottomLeftFull => 2,
+            TimeMachinePartType::BottomRightFull => 3,
+            TimeMachinePartType::Middle => 4,
+            TimeMachinePartType::TopFull => 5,
+            TimeMachinePartType::BottomFull => 6,
+            TimeMachinePartType::LeftFull => 7,
+            TimeMachinePartType::RightFull => 8,
+            TimeMachinePartType::LeftTangentTop => 9,
+            TimeMachinePartType::RightTangentTop => 10,
+            TimeMachinePartType::LeftTangentBottom => 11,
+            TimeMachinePartType::RightTangentBottom => 12,
+            TimeMachinePartType::TopTangentLeft => 13,
+            TimeMachinePartType::BottomTangentLeft => 14,
+            TimeMachinePartType::TopTangentRight => 15,
+            TimeMachinePartType::BottomTangentRight => 16,
+            TimeMachinePartType::LeftPerpTop => 17,
+            TimeMachinePartType::RightPerpTop => 18,
+            TimeMachinePartType::LeftPerpBottom => 19,
+            TimeMachinePartType::RightPerpBottom => 20,
+            TimeMachinePartType::TopPerpLeft => 21,
+            TimeMachinePartType::BottomPerpLeft => 22,
+            TimeMachinePartType::TopPerpRight => 23,
+            TimeMachinePartType::BottomPerpRight => 24,
+            TimeMachinePartType::TopOpening => 25,
+            TimeMachinePartType::BottomOpening => 26,
+            TimeMachinePartType::LeftOpening => 27,
+            TimeMachinePartType::RightOpening => 28,
+            TimeMachinePartType::TopLeftTangentRight => 29,
+            TimeMachinePartType::BottomLeftTangentRight => 30,
+            TimeMachinePartType::TopRightTangentLeft => 31,
+            TimeMachinePartType::BottomRightTangentLeft => 32,
+            TimeMachinePartType::TopLeftTangentBottom => 33,
+            TimeMachinePartType::BottomLeftTangentTop => 34,
+            TimeMachinePartType::TopRightTangentBottom => 35,
+            TimeMachinePartType::BottomRightTangentTop => 36,
+            TimeMachinePartType::MiddleTopOpen => 37,
+            TimeMachinePartType::MiddleBottomOpen => 38,
+            TimeMachinePartType::MiddleLeftOpen => 39,
+            TimeMachinePartType::MiddleRightOpen => 40,
+        }
+    }
+
     pub fn fits_on_top(&self, next: &Self) -> bool {
         match (self, next) {
             // Straight up cannot have anything connecting to the top
