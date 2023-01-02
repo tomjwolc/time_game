@@ -168,17 +168,16 @@ fn setup_grid(
         grid.add_entity_to_pos(
             coords.x as usize,
             coords.y as usize,
-            grid_entity_info.variant,
-            grid_entity_info.id,
+            &grid_entity_info
         );
 
-        let (corner, entity) = grid.get_entity_from_coords_mut(&coords).unwrap();
+        let (corner, entity) = grid.get_entity_mut(&grid_entity_info).unwrap();
 
         if grid_entity_info.pos == (0, 0) {
             *corner = (
                 coords.x as usize,
                 coords.y as usize
-            )
+            );
         }
 
         entity.try_add_part_to_grid(
@@ -188,7 +187,7 @@ fn setup_grid(
         );
     }
 
-    println!("{}", *grid);
+    // println!("{}", *grid);
 }
 
 fn end_level_setup(mut level_setup_completed: ResMut<LevelSetupCompleted>) {

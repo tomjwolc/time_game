@@ -107,25 +107,25 @@ impl Grid {
         self.entity_grid.len()
     }
 
-    pub fn get_entity<'a>(&'a self, variant: &str, id: usize) -> Option<&'a ((usize, usize), GridEntity)> {
+    pub fn get_entity<'a>(&'a self, grid_entity_info: &GridEntityInfo) -> Option<&'a ((usize, usize), GridEntity)> {
         self.entities.iter().find(|(_, grid_entity)| {
-            match (grid_entity, variant) {
+            match (grid_entity, grid_entity_info.variant) {
                 (GridEntity::Player { .. }, "Player") => true,
                 (GridEntity::PastPlayer { id: entity_id, .. }, "PastPlayer") |
                 (GridEntity::Box {id: entity_id, .. }, "Box") |
-                (GridEntity::TimeMachine { id: entity_id, .. }, "TimeMachine") => *entity_id == id,
+                (GridEntity::TimeMachine { id: entity_id, .. }, "TimeMachine") => *entity_id == grid_entity_info.id,
                 _ => false
             }
         })
     }
 
-    pub fn get_entity_mut<'a>(&'a mut self, variant: &str, id: usize) -> Option<&'a mut ((usize, usize), GridEntity)> {
+    pub fn get_entity_mut<'a>(&'a mut self, grid_entity_info: &GridEntityInfo) -> Option<&'a mut ((usize, usize), GridEntity)> {
         self.entities.iter_mut().find(|(_, grid_entity)| {
-            match (grid_entity, variant) {
+            match (grid_entity, grid_entity_info.variant) {
                 (GridEntity::Player { .. }, "Player") => true,
                 (GridEntity::PastPlayer { id: entity_id, .. }, "PastPlayer") |
                 (GridEntity::Box {id: entity_id, .. }, "Box") |
-                (GridEntity::TimeMachine { id: entity_id, .. }, "TimeMachine") => *entity_id == id,
+                (GridEntity::TimeMachine { id: entity_id, .. }, "TimeMachine") => *entity_id == grid_entity_info.id,
                 _ => false
             }
         })
@@ -147,21 +147,23 @@ impl Grid {
         }
     }
 
-    fn get_entity_index(&self, variant: &str, id: usize) -> Option<usize> {
+    fn get_entity_index(&self, grid_entity_info: &GridEntityInfo) -> Option<usize> {
         self.entities.iter().position(|(_, grid_entity)| {
-            match (grid_entity, variant) {
+            match (grid_entity, grid_entity_info.variant) {
                 (GridEntity::Player { .. }, "Player") => true,
                 (GridEntity::PastPlayer { id: entity_id, .. }, "PastPlayer") |
                 (GridEntity::Box {id: entity_id, .. }, "Box") |
-                (GridEntity::TimeMachine { id: entity_id, .. }, "TimeMachine") => *entity_id == id,
+                (GridEntity::TimeMachine { id: entity_id, .. }, "TimeMachine") => *entity_id == grid_entity_info.id,
                 _ => false
             }
         })
     }
 
-    pub fn add_entity(&mut self, x: usize, y: usize, variant: &str, id: usize) -> usize {
-        self.get_entity_index(variant, id).unwrap_or_else(|| {
-            self.entities.push(((x, y), match variant {
+    pub fn add_entity(&mut self, x: usize, y: usize, grid_entity_info: &GridEntityInfo) -> usize {
+        self.get_entity_index(grid_entity_info).unwrap_or_else(|| {
+            let id = grid_entity_info.id;
+
+            self.entities.push(((x, y), match grid_entity_info.variant {
                 "Player" => GridEntity::Player { movements: Vec::new() },
                 "PastPlayer" => GridEntity::PastPlayer { id, movements: Vec::new() },
                 "Box" => GridEntity::Box { id },
@@ -180,8 +182,8 @@ impl Grid {
     // If varient and id exist in self.entities it just adds the index
     // If varient and id are valid, but don't exist it adds the entity to self.entities and the index
     // If variant is invalid it panics
-    pub fn add_entity_to_pos(&mut self, x: usize, y: usize, variant: &str, id: usize) {
-        let index = self.add_entity(x, y, variant, id);
+    pub fn add_entity_to_pos(&mut self, x: usize, y: usize, grid_entity_info: &GridEntityInfo) {
+        let index = self.add_entity(x, y, grid_entity_info);
         let current_index = &mut self.entity_grid[x][y];
 
         if *current_index == 0 {
