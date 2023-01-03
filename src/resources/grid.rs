@@ -24,12 +24,82 @@ impl GridEntity {
     fn is_tm(&self) -> bool {
         if let GridEntity::TimeMachine { .. } = self { true } else { false }
     }
+        
+    fn get_tm_grid<'a>(&'a self) -> &'a Vec<Vec<(TimeMachinePartType, usize)>> {
+        if let GridEntity::TimeMachine{ grid, .. } = self {
+            grid
+        } else {
+            panic!("Tried to get tm_grid entity, but it wasn't the time machine varient")
+        }
+    }
     
+    fn get_tm_grid_mut<'a>(&'a mut self) -> &'a mut Vec<Vec<(TimeMachinePartType, usize)>> {
+        if let GridEntity::TimeMachine{ grid, .. } = self {
+            grid
+        } else {
+            panic!("Tried to get tm_grid entity, but it wasn't the time machine varient")
+        }
+    }
+
     fn is_pushable(&self) -> bool {
         match self {
             GridEntity::TimeMachine { .. } => false,
             GridEntity::None { .. } => false,
             _ => true
+        }
+    }
+
+    fn entity_at<'a>(&'a self, corner: (usize, usize), pos: (usize, usize), entities: &'a Vec<((usize, usize), GridEntity)>) -> &'a GridEntity {
+        match self {
+            GridEntity::TimeMachine { grid, .. } => {
+                let entity = &entities[grid[ pos.0 - corner.0 ][ pos.1 - corner.1 ].1];
+
+                entity.1.entity_at(entity.0, pos, entities)
+            },
+            entity => entity
+        }
+    }
+
+    fn set_to_pos(
+        self_index: usize, 
+        corner: (usize, usize), 
+        pos: (usize, usize), 
+        entity_index: usize, 
+        entities: &mut Vec<((usize, usize), GridEntity)>
+    ) {
+        println!("tm: corner: {:?}, pos: {:?} to {}", corner, pos, entity_index);
+
+        let grid = entities[ self_index ].1.get_tm_grid();
+        let next_index = grid[ pos.0 - corner.0 ][ pos.1 - corner.1 ].1;
+
+        if entities[ next_index ].1.is_tm() {
+            GridEntity::set_to_pos(next_index, corner, pos, entity_index, entities);
+        } else {
+            let grid = entities[ self_index ].1.get_tm_grid_mut();
+            grid[ pos.0 - corner.0 ][ pos.1 - corner.1 ].1 = entity_index;
+        }
+    }
+
+    fn entity_index_at(
+        &self, 
+        corner: (usize, usize), 
+        pos: (usize, usize), 
+        entities: &Vec<((usize, usize), GridEntity)>
+    ) -> usize {
+        if let GridEntity::TimeMachine { grid, .. } = self {
+            let entity = &entities[ grid[ pos.0 - corner.0 ][ pos.1 - corner.1 ].1 ];
+
+            if entity.1.is_tm() {
+                entity.1.entity_index_at(
+                    entity.0, 
+                    pos, 
+                    entities
+                )
+            } else {
+                grid[ pos.0 - corner.0 ][ pos.1 - corner.1 ].1
+            }
+        } else {
+            panic!("Called entity_index_at on non-time machine");
         }
     }
 
@@ -239,17 +309,14 @@ impl Grid {
             None => return false
         };
 
-        if ( 
-            self.entity_grid[ x1 ][ y1 ] == entity_index &&
-            self.entity_grid[ x2 ][ y2 ] == 0
-        ) || (
-            self.entity_grid[ x1 ][ y1 ] == entity_index &&
-            self.get_entity_from_pos(x2, y2).unwrap().1.is_pushable() &&
-            self.try_move(self.entity_grid[ x2 ][ y2 ], direction)
-        ) {
-            self.entity_grid[ x1 ][ y1 ] = 0;
-            self.entity_grid[ x2 ][ y2 ] = entity_index;
+        let next_index = self.entity_index_at(x2, y2);
 
+        if self.entity_at(x2, y2) == &GridEntity::None || (
+            self.entity_at(x2, y2).is_pushable() &&
+            self.try_move(next_index, direction)
+        ) {
+            self.set_to_pos(x1, y1, 0);
+            self.set_to_pos(x2, y2, entity_index);
             self.entities[entity_index].0 = (x2, y2);
 
             true
@@ -263,6 +330,44 @@ impl Grid {
             self.try_move(index, direction)
         } else {
             false
+        }
+    }
+
+    fn entity_at<'a>(&'a self, x: usize, y: usize) -> &'a GridEntity {
+        let entity = &self.entities[self.entity_grid[ x ][ y ]];
+
+        entity.1.entity_at(entity.0, (x, y), &self.entities)
+    }
+
+    fn entity_index_at(&mut self, x: usize, y: usize) -> usize {
+        let entity = &self.entities[ self.entity_grid[ x ][ y ] ];
+
+        if entity.1.is_tm() {
+            entity.1.entity_index_at(
+                entity.0, 
+                (x, y), 
+                &self.entities
+            )
+        } else {
+            self.entity_grid[ x ][ y ]
+        }
+    }
+
+    fn set_to_pos(&mut self, x: usize, y: usize, entity_index: usize) {
+        let entity = &self.entities[ self.entity_grid[ x ][ y ] ];
+
+        println!("({}, {}) to {}", x, y, entity_index);
+
+        if entity.1.is_tm() {
+            GridEntity::set_to_pos(
+                self.entity_grid[ x ][ y ], 
+                entity.0, 
+                (x, y), 
+                entity_index, 
+                &mut self.entities
+            );
+        } else {
+            self.entity_grid[ x ][ y ] = entity_index;
         }
     }
 }
