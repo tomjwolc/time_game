@@ -60,26 +60,6 @@ impl GridEntity {
         }
     }
 
-    fn set_to_pos(
-        self_index: usize, 
-        corner: (usize, usize), 
-        pos: (usize, usize), 
-        entity_index: usize, 
-        entities: &mut Vec<((usize, usize), GridEntity)>
-    ) {
-        println!("tm: corner: {:?}, pos: {:?} to {}", corner, pos, entity_index);
-
-        let grid = entities[ self_index ].1.get_tm_grid();
-        let next_index = grid[ pos.0 - corner.0 ][ pos.1 - corner.1 ].1;
-
-        if entities[ next_index ].1.is_tm() {
-            GridEntity::set_to_pos(next_index, corner, pos, entity_index, entities);
-        } else {
-            let grid = entities[ self_index ].1.get_tm_grid_mut();
-            grid[ pos.0 - corner.0 ][ pos.1 - corner.1 ].1 = entity_index;
-        }
-    }
-
     fn entity_index_at(
         &self, 
         corner: (usize, usize), 
@@ -100,6 +80,24 @@ impl GridEntity {
             }
         } else {
             panic!("Called entity_index_at on non-time machine");
+        }
+    }
+
+    fn set_to_pos(
+        self_index: usize, 
+        corner: (usize, usize), 
+        pos: (usize, usize), 
+        entity_index: usize, 
+        entities: &mut Vec<((usize, usize), GridEntity)>
+    ) {
+        let grid = entities[ self_index ].1.get_tm_grid();
+        let next_index = grid[ pos.0 - corner.0 ][ pos.1 - corner.1 ].1;
+
+        if entities[ next_index ].1.is_tm() {
+            GridEntity::set_to_pos(next_index, corner, pos, entity_index, entities);
+        } else {
+            let grid = entities[ self_index ].1.get_tm_grid_mut();
+            grid[ pos.0 - corner.0 ][ pos.1 - corner.1 ].1 = entity_index;
         }
     }
 
@@ -355,8 +353,6 @@ impl Grid {
 
     fn set_to_pos(&mut self, x: usize, y: usize, entity_index: usize) {
         let entity = &self.entities[ self.entity_grid[ x ][ y ] ];
-
-        println!("({}, {}) to {}", x, y, entity_index);
 
         if entity.1.is_tm() {
             GridEntity::set_to_pos(
