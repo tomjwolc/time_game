@@ -3,6 +3,8 @@ use bevy_ecs_ldtk::prelude::*;
 // use iyes_loopless::prelude::*;
 use crate::prelude::*;
 
+pub const TILE_SIZE: usize = 256;
+
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub enum AppState {
     MainMenu,
@@ -28,11 +30,12 @@ fn main() {
         .add_plugin(LevelSetupPlugin)
         .add_plugin(TickUpdatePlugin)
 
+        .insert_resource(Ticks(0))
         .insert_resource(Dims {x: 0, y: 0})
         .insert_resource(Grid::new())
 
         .insert_resource(ClearColor(Color::hex("1E2B39").unwrap()))
-        .insert_resource(LevelSelection::Index(0))
+        .insert_resource(LevelSelection::Index(1))
         .insert_resource(LdtkSettings {
             level_background: LevelBackground::Nonexistent,
             ..Default::default()
@@ -55,9 +58,10 @@ pub mod setup;
 pub mod entities;
 pub mod tick_update_plugin;
 pub mod resources;
+pub mod time_travel;
 
 pub mod prelude {
     pub use super::{
-        setup::*, entities::*, tick_update_plugin::*, resources::*
+        setup::*, entities::*, tick_update_plugin::*, resources::*, time_travel::*
     };
 }

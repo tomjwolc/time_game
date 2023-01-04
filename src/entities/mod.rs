@@ -2,6 +2,8 @@
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 
+use crate::tick_update_plugin::GridEntity;
+
 #[derive(Default, Component)]
 pub struct Player;
 
@@ -18,39 +20,54 @@ pub struct TimeMachine;
 pub struct GridEntityInfo {
     pub variant: &'static str,
     pub id: usize,
-    pub pos: (usize, usize)
+    pub pos: (usize, usize),
+    pub time_machine_depth: usize
 }
 
 impl GridEntityInfo {
-    fn player(_: EntityInstance) -> Self {
+    pub fn from(grid_entity: &GridEntity) -> Self {
+        match grid_entity {
+            GridEntity::Player { .. } => Self { variant: "Player", ..default() },
+            GridEntity::PastPlayer { id, .. } => Self { variant: "PastPlayer", id: *id, ..default() },
+            GridEntity::Box { id } => Self { variant: "Box", id: *id, ..default() },
+            GridEntity::TimeMachine { id, .. } => Self { variant: "TimeMachine", id: *id, ..default() },
+            GridEntity::None => Self::default()
+        }
+    }
+
+    pub fn player(_: EntityInstance) -> Self {
         Self {
             variant: "Player",
             id: 0,
-            pos: (0, 0)
+            pos: (0, 0),
+            time_machine_depth: 0
         }
     }
 
     fn past_player(_: EntityInstance) -> Self {
         Self {
             variant: "PastPlayer",
-            id: 0, // to be changed later
-            pos: (0, 0)
+            id: 0, 
+            pos: (0, 0),
+            time_machine_depth: 0
         }
     }
 
     fn box_entity(_: EntityInstance) -> Self {
         Self {
             variant: "Box",
-            id: 0, // to be changed later
-            pos: (0, 0)
+            id: 0, 
+            pos: (0, 0),
+            time_machine_depth: 0
         }
     }
 
     fn time_machine(_: EntityInstance) -> Self {
         Self {
             variant: "TimeMachine",
-            id: 0, // to be changed later
-            pos: (0, 0) // to be changed later
+            id: 0,
+            pos: (0, 0),
+            time_machine_depth: 0
         }
     }
 }
@@ -770,13 +787,10 @@ impl std::str::FromStr for TimeMachinePartType {
             "MiddleBottomOpen" => Ok(TimeMachinePartType::MiddleBottomOpen),
             "MiddleLeftOpen" => Ok(TimeMachinePartType::MiddleLeftOpen),
             "MiddleRightOpen" => Ok(TimeMachinePartType::MiddleRightOpen),
-            _ => Err(())
+            s => {println!("{s}"); Err(())}
         }
     }
 }
-
-#[derive(Default, Component)]
-pub struct TimeMachineId(pub usize);
 
 #[derive(Bundle, LdtkEntity)]
 pub struct TimeMachinePartBundle {

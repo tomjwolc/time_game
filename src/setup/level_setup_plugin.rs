@@ -153,13 +153,13 @@ fn setup_grid(
 ) {
     *grid = Grid::new_sized(dims.x, dims.y);
 
-    for (i, (mut grid_entity_info, coords, opt_part_type)) in grid_entities.iter_mut().enumerate() {
-        if grid_entity_info.id == 0 { grid_entity_info.id = i };
+    for (mut grid_entity_info, coords, opt_part_type) in grid_entities.iter_mut() {
+        if grid_entity_info.id == 0 { grid_entity_info.id = grid.num_entities() };
 
         grid.add_entity_to_pos(
             coords.x as usize,
             coords.y as usize,
-            &grid_entity_info
+            &mut grid_entity_info
         );
 
         let (corner, entity) = grid.get_entity_mut(&grid_entity_info).unwrap();

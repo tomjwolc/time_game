@@ -10,7 +10,7 @@
 	},
 	"jsonVersion": "1.1.3",
 	"appBuildId": 458364,
-	"nextUid": 50,
+	"nextUid": 51,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -336,7 +336,7 @@
 		{ "id": "LeftFull", "tileId": 20, "color": 2173490, "__tileSrcRect": [1024,512,256,256] },
 		{ "id": "BottomLeftFull", "tileId": 28, "color": 2436664, "__tileSrcRect": [1024,768,256,256] },
 		{ "id": "TopFull", "tileId": 13, "color": 2173490, "__tileSrcRect": [1280,256,256,256] },
-		{ "id": "MiddleFull", "tileId": 21, "color": 1778986, "__tileSrcRect": [1280,512,256,256] },
+		{ "id": "Middle", "tileId": 21, "color": 1778986, "__tileSrcRect": [1280,512,256,256] },
 		{ "id": "BottomFull", "tileId": 29, "color": 2173490, "__tileSrcRect": [1280,768,256,256] },
 		{ "id": "TopRightFull", "tileId": 14, "color": 2436664, "__tileSrcRect": [1536,256,256,256] },
 		{ "id": "RightFull", "tileId": 22, "color": 2173490, "__tileSrcRect": [1536,512,256,256] },
@@ -867,7 +867,303 @@
 					]
 				}
 			],
-			"__neighbours": []
+			"__neighbours": [{ "levelIid": "32fdb110-7820-11ed-a3a2-95d9bbfa9fb9", "levelUid": 50, "dir": "e" }]
+		},
+		{
+			"identifier": "Level_1",
+			"iid": "32fdb110-7820-11ed-a3a2-95d9bbfa9fb9",
+			"uid": 50,
+			"worldX": 2048,
+			"worldY": 0,
+			"worldDepth": 0,
+			"pxWid": 3072,
+			"pxHei": 2048,
+			"__bgColor": "#2E3B49",
+			"bgColor": null,
+			"useAutoIdentifier": true,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__smartColor": "#8C939B",
+			"__bgPos": null,
+			"externalRelPath": null,
+			"fieldInstances": [],
+			"layerInstances": [
+				{
+					"__identifier": "Interactables",
+					"__type": "Entities",
+					"__cWid": 12,
+					"__cHei": 8,
+					"__gridSize": 256,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "32fdff30-7820-11ed-a3a2-cdcd373c7d75",
+					"levelId": 50,
+					"layerDefUid": 11,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 711204,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": [
+						{
+							"__identifier": "Player",
+							"__grid": [4,2],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 26, "x": 1536, "y": 0, "w": 256, "h": 256 },
+							"__smartColor": "#DC1818",
+							"iid": "98454600-7820-11ed-a3a2-9bc2778c8a87",
+							"width": 256,
+							"height": 256,
+							"defUid": 9,
+							"px": [1024,512],
+							"fieldInstances": []
+						},
+						{
+							"__identifier": "Box",
+							"__grid": [7,5],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 26, "x": 512, "y": 512, "w": 256, "h": 256 },
+							"__smartColor": "#1BCA69",
+							"iid": "9e6da8b0-7820-11ed-a3a2-7bca93db770b",
+							"width": 256,
+							"height": 256,
+							"defUid": 10,
+							"px": [1792,1280],
+							"fieldInstances": []
+						},
+						{
+							"__identifier": "Box",
+							"__grid": [7,2],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 26, "x": 512, "y": 512, "w": 256, "h": 256 },
+							"__smartColor": "#1BCA69",
+							"iid": "f1a84810-7820-11ed-a3a2-e757f2d2a8f9",
+							"width": 256,
+							"height": 256,
+							"defUid": 10,
+							"px": [1792,512],
+							"fieldInstances": []
+						}
+					]
+				},
+				{
+					"__identifier": "ActiveIndicators",
+					"__type": "Entities",
+					"__cWid": 12,
+					"__cHei": 8,
+					"__gridSize": 256,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "32fdff31-7820-11ed-a3a2-6336512799c3",
+					"levelId": 50,
+					"layerDefUid": 48,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 7663652,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": []
+				},
+				{
+					"__identifier": "Time_machines",
+					"__type": "Entities",
+					"__cWid": 12,
+					"__cHei": 8,
+					"__gridSize": 256,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "32fdff32-7820-11ed-a3a2-3de7521cadf0",
+					"levelId": 50,
+					"layerDefUid": 29,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 9556173,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": [
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [7,1],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1280, "y": 256, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "54ecfa60-7820-11ed-a3a2-c52c89d9d5a9",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [1792,256],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "TopFull", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1280, "y": 256, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["TopFull"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [8,1],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1536, "y": 256, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "56f9ba50-7820-11ed-a3a2-a7ba184ed06e",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [2048,256],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "TopRightFull", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1536, "y": 256, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["TopRightFull"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [7,3],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1536, "y": 0, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "59690ca0-7820-11ed-a3a2-2385132d278c",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [1792,768],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "MiddleBottomOpen", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1536, "y": 0, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["MiddleBottomOpen"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [6,1],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1024, "y": 256, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "6e7318c0-7820-11ed-a3a2-37eb20602b38",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [1536,256],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "TopLeftFull", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1024, "y": 256, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["TopLeftFull"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [6,2],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1024, "y": 512, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "7837b500-7820-11ed-a3a2-ab45084ddb8a",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [1536,512],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "LeftFull", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1024, "y": 512, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["LeftFull"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [6,3],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 0, "y": 1280, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "7a6e9230-7820-11ed-a3a2-11c15783dbd1",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [1536,768],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "LeftPerpBottom", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 0, "y": 1280, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["LeftPerpBottom"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [8,3],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 256, "y": 1280, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "81d34570-7820-11ed-a3a2-7534f5cb117e",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [2048,768],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "RightPerpBottom", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 256, "y": 1280, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["RightPerpBottom"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [8,2],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1536, "y": 512, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "89347640-7820-11ed-a3a2-cba899e9cc7e",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [2048,512],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "RightFull", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1536, "y": 512, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["RightFull"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [7,2],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1280, "y": 512, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "8c73e9d0-7820-11ed-a3a2-5344affa78fb",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [1792,512],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "Middle", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1280, "y": 512, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Middle"]
+							}] }]
+						}
+					]
+				}
+			],
+			"__neighbours": [{ "levelIid": "3b2687d0-7820-11ed-89c6-e71c3bc45528", "levelUid": 0, "dir": "w" }]
 		}
 	],
 	"worlds": []

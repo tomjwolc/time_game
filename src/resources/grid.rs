@@ -1,6 +1,8 @@
+use std::collections::HashSet;
+
 use super::*;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum GridEntity {
     Player {
         movements: Vec<IVec2>
@@ -13,7 +15,7 @@ pub enum GridEntity {
         id: usize
     },
     TimeMachine {
-        start_instance: Option<Grid>,
+        start_instance: Option<(usize, Option<usize>, Grid)>,
         id: usize, 
         grid: Vec<Vec<(TimeMachinePartType, usize)>>
     },
@@ -149,9 +151,52 @@ impl GridEntity {
             (_, entity) => panic!("Can't add to the variant: {:?}", entity)
         }
     }
+
+    fn get_depth_of(
+        &self, 
+        corner: (usize, usize), 
+        pos: (usize, usize), 
+        index: usize,
+        entities: &Vec<((usize, usize), GridEntity)>
+    ) -> usize {
+        match self {
+            GridEntity::TimeMachine { grid, .. } => {
+                let entity = &entities[ grid[ pos.0 - corner.0 ][ pos.1 - corner.1 ].1 ];
+
+                entity.1.get_depth_of(entity.0, pos, index, entities)
+            },
+            _ => 0
+        }
+    }
+
+    fn get_contents<'a>(
+        &self,
+        entities: &'a Vec<((usize, usize), GridEntity)>
+    ) -> Vec<usize> {
+        match self {
+            GridEntity::TimeMachine { grid, .. } => {
+                let mut contents: Vec<usize> = Vec::new();
+
+                for row in grid {
+                    for (_, index) in row {
+                        if !contents.contains( index ) {
+                            contents.push( *index );
+                            contents = [
+                                contents,
+                                entities[ *index ].1.get_contents(entities)
+                            ].concat();
+                        }
+                    }
+                }
+
+                contents
+            },
+            _ => Vec::new()
+        }
+    }
 }
 
-#[derive(Resource, Debug, PartialEq)]
+#[derive(Resource, Debug, PartialEq, Clone)]
 pub struct Grid {
     ghost_player_num: usize,
     entities: Vec<((usize, usize), GridEntity)>,
@@ -183,6 +228,10 @@ impl Grid {
         self.entity_grid.len()
     }
 
+    pub fn num_entities(&self) -> usize {
+        self.entities.len()
+    }
+
     pub fn get_entity<'a>(&'a self, grid_entity_info: &GridEntityInfo) -> Option<&'a ((usize, usize), GridEntity)> {
         self.entities.iter().find(|(_, grid_entity)| {
             match (grid_entity, grid_entity_info.variant) {
@@ -202,6 +251,30 @@ impl Grid {
                 (GridEntity::PastPlayer { id: entity_id, .. }, "PastPlayer") |
                 (GridEntity::Box {id: entity_id, .. }, "Box") |
                 (GridEntity::TimeMachine { id: entity_id, .. }, "TimeMachine") => *entity_id == grid_entity_info.id,
+                _ => false
+            }
+        })
+    }
+    
+    pub fn get_entity_from_id<'a>(&'a self, variant: &str, id: usize) -> Option<&'a ((usize, usize), GridEntity)> {
+        self.entities.iter().find(|(_, grid_entity)| {
+            match (grid_entity, variant) {
+                (GridEntity::Player { .. }, "Player") => true,
+                (GridEntity::PastPlayer { id: entity_id, .. }, "PastPlayer") |
+                (GridEntity::Box {id: entity_id, .. }, "Box") |
+                (GridEntity::TimeMachine { id: entity_id, .. }, "TimeMachine") => *entity_id == id,
+                _ => false
+            }
+        })
+    }
+
+    pub fn get_entity_from_id_mut<'a>(&'a mut self, variant: &str, id: usize) -> Option<&'a mut ((usize, usize), GridEntity)> {
+        self.entities.iter_mut().find(|(_, grid_entity)| {
+            match (grid_entity, variant) {
+                (GridEntity::Player { .. }, "Player") => true,
+                (GridEntity::PastPlayer { id: entity_id, .. }, "PastPlayer") |
+                (GridEntity::Box {id: entity_id, .. }, "Box") |
+                (GridEntity::TimeMachine { id: entity_id, .. }, "TimeMachine") => *entity_id == id,
                 _ => false
             }
         })
@@ -251,6 +324,18 @@ impl Grid {
         })
     }
 
+    fn get_entity_index_from_id(&self, variant: &str, id: usize) -> Option<usize> {
+        self.entities.iter().position(|(_, grid_entity)| {
+            match (grid_entity, variant) {
+                (GridEntity::Player { .. }, "Player") => true,
+                (GridEntity::PastPlayer { id: entity_id, .. }, "PastPlayer") |
+                (GridEntity::Box {id: entity_id, .. }, "Box") |
+                (GridEntity::TimeMachine { id: entity_id, .. }, "TimeMachine") => *entity_id == id,
+                _ => false
+            }
+        })
+    }
+
     pub fn add_entity(&mut self, x: usize, y: usize, grid_entity_info: &GridEntityInfo) -> usize {
         self.get_entity_index(grid_entity_info).unwrap_or_else(|| {
             let id = grid_entity_info.id;
@@ -274,8 +359,8 @@ impl Grid {
     // If varient and id exist in self.entities it just adds the index
     // If varient and id are valid, but don't exist it adds the entity to self.entities and the index
     // If variant is invalid it panics
-    pub fn add_entity_to_pos(&mut self, x: usize, y: usize, grid_entity_info: &GridEntityInfo) {
-        let index = self.add_entity(x, y, grid_entity_info);
+    pub fn add_entity_to_pos(&mut self, x: usize, y: usize, grid_entity_info: &mut GridEntityInfo) {
+        let index = self.add_entity(x, y, &*grid_entity_info);
         let current_index = &mut self.entity_grid[x][y];
 
         if *current_index == 0 {
@@ -287,6 +372,8 @@ impl Grid {
                 (x, y), 
                 &mut self.entities
             );
+
+            grid_entity_info.time_machine_depth = 1;
         } else if self.entities[index].1.is_tm() {
             GridEntity::add_to_grid(
                 index, 
@@ -297,6 +384,63 @@ impl Grid {
 
             *current_index = index;
         }
+    }
+
+    // !!Assumes that player is in the time machine!!
+    pub fn replace_time_machine(&mut self, new_grid: &Grid, time_machine_index: usize, t: usize) {
+        self.replace_player_to_pos(t, new_grid.get_entity_from_id("Player", 0).unwrap().0);
+
+        let (old_corner, ref old_tm_entity) = self.entities[ time_machine_index ];
+        let old_contents = old_tm_entity.get_contents(&self.entities);
+        
+        let (new_corner, ref new_tm_entity) = new_grid.entities[ time_machine_index ];
+        let new_contents = new_tm_entity.get_contents(&new_grid.entities);
+
+        for &index in new_contents.iter() {
+            if self.entities.get( index ).is_none() {
+                
+            } else if !old_contents.contains( &index ) {
+
+            }
+        }
+        
+        // Delete the stuff that was overided by the new time machine and
+        // update the position of the stuff that stayed in the time machine
+        for &index in old_contents.iter() {
+            if new_contents.contains( &index ) { // Updating posititon
+                self.entities[ index ].0 = (
+                    new_grid.entities[ index ].0.0 - new_corner.0 + old_corner.0,
+                    new_grid.entities[ index ].0.1 - new_corner.1 + old_corner.1
+                );
+            } else { // Deletion
+                self.entities[ index ] = ((0, 0), GridEntity::None);
+            }
+        }
+
+    }
+
+    pub fn replace_player_to_pos(&mut self, t: usize, pos: (usize, usize)) {
+        let player_index = self
+            .get_entity_index_from_id("Player", 0)
+            .expect("Could not find player in grid");
+
+        let movements = if let (_, GridEntity::Player { movements }) = &self.entities[ player_index ] { 
+            movements 
+        } else { 
+            panic!("This should have been unreachable, whoops"); 
+        };
+
+        let past_player = GridEntity::PastPlayer {
+            movements: movements[t..].to_vec(),
+            id: self.entities.len()
+        };
+
+        self.entities.push((
+            self.entities[ player_index ].0,
+            past_player
+        ));
+
+        self.entities[ player_index ].0 = pos;
     }
 
     pub fn try_move(&mut self, entity_index: usize, direction: MoveDirection) -> bool {
@@ -366,14 +510,27 @@ impl Grid {
             self.entity_grid[ x ][ y ] = entity_index;
         }
     }
+
+    pub fn set_depth_of(&self, grid_entity_info: &mut GridEntityInfo) {
+        let index = self.get_entity_index(grid_entity_info).unwrap();
+        let ((x, y), _) = self.entities[ index ];
+        let entity = self.get_entity_from_pos(x, y).unwrap();
+
+        grid_entity_info.time_machine_depth = entity.1.get_depth_of(
+            entity.0,
+            (x, y),
+            index,
+            &self.entities
+        );
+    }
 }
 
 impl std::fmt::Display for GridEntity {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Player { movements } => {
-                if movements.len() == 0 {
-                    write!(f, "Player: []")
+                if true || movements.len() == 0 {
+                    write!(f, "Player: [..]")
                 } else {
                     write!(f, "Player: [{}\n        ]", 
                         movements.iter().fold(String::new(), |string, movement| format!("{}\n            {},", string, movement))

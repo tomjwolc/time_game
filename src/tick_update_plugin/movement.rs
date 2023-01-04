@@ -26,7 +26,7 @@ impl MoveDirection {
             Self::Right if pos.0 < max_x - 1 => Some(( pos.0 + 1 ,   pos.1   )),
             _                                => None
         }
-    }   
+    } 
 }
 
 pub fn movement_event_happened(key_event: Res<KeyEvent>) -> bool {
