@@ -25,6 +25,11 @@ impl Plugin for TickUpdatePlugin {
                 .after("set key event")
                 .before("grid update")
             ).add_system(
+                update_events
+                .run_if(any_update_happened)
+                .after("set key event")
+                .before("grid update")
+            ).add_system(
                 update_to_grid
                 .run_if(any_update_happened)
                 .label("grid update")
@@ -104,6 +109,11 @@ pub fn update_to_grid(
     mut entities_query: Query<(Entity, &mut Transform, &mut GridCoords, &mut GridEntityInfo)>,
     grid: Res<Grid>
 ) {
+    let mut grid_entities: Vec<&((usize, usize), GridEntity)> = grid
+        .entities_iter()
+        .filter(|(_, grid_entity)| grid_entity != &GridEntity::None)
+        .collect();
+
     for (
         bevy_entity, 
         mut transform, 
@@ -117,11 +127,28 @@ pub fn update_to_grid(
             coords.y = (corner.1 + grid_entity_info.pos.1) as i32;
     
             update_transform(&coords, &mut transform);
+
+            // Removes the particular entity from the vec
+            grid_entities = grid_entities
+                .into_iter()
+                .filter(|(_, grid_entity)| {
+                    !match (grid_entity, grid_entity_info.variant) {
+                        (GridEntity::Player { .. }, "Player") => true,
+                        (GridEntity::PastPlayer { id: entity_id, .. }, "PastPlayer") |
+                        (GridEntity::Box {id: entity_id, .. }, "Box") |
+                        (GridEntity::TimeMachine { id: entity_id, .. }, "TimeMachine") => *entity_id == grid_entity_info.id,
+                        _ => false
+                    }
+                }).collect();
         } else {
             // deletes entities that are no longer in grid
             commands.entity(bevy_entity).despawn_recursive();
         }
     };
+
+    for (corner, grid_entity) in grid_entities {
+        grid_entity.spawn_bundle(*corner, &mut commands);
+    }
 }
 
 pub fn update_transform(coords: &GridCoords, transform: &mut Transform) {

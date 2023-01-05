@@ -1,6 +1,4 @@
-use crate::prelude::*;
-use bevy::prelude::*;
-use bevy_ecs_ldtk::prelude::*;
+pub use super::*;
 
 pub mod level_setup_plugin;
 pub use level_setup_plugin::*;

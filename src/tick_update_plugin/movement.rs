@@ -27,6 +27,16 @@ impl MoveDirection {
             _                                => None
         }
     } 
+
+    pub fn from_ivec(ivec: IVec2) -> Self {
+        match ivec.to_array() {
+            [0, 1] => MoveDirection::Up,
+            [0, -1] => MoveDirection::Down,
+            [-1, 0] => MoveDirection::Left,
+            [1, 0] => MoveDirection::Right,
+            vec => panic!("Cannot convert {:?} to MoveDirection", vec)
+        }
+    }
 }
 
 pub fn movement_event_happened(key_event: Res<KeyEvent>) -> bool {

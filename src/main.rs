@@ -29,7 +29,9 @@ fn main() {
 
         .add_plugin(LevelSetupPlugin)
         .add_plugin(TickUpdatePlugin)
+        .add_plugin(ClickEventsPlugin)
 
+        .insert_resource(LevelWindowInfo { scaling_factor: 1.0, offset: (0.0, 0.0) })
         .insert_resource(Ticks(0))
         .insert_resource(Dims {x: 0, y: 0})
         .insert_resource(Grid::new())
@@ -58,10 +60,10 @@ pub mod setup;
 pub mod entities;
 pub mod tick_update_plugin;
 pub mod resources;
-pub mod time_travel;
+pub mod click_events_plugin;
 
 pub mod prelude {
     pub use super::{
-        setup::*, entities::*, tick_update_plugin::*, resources::*, time_travel::*
+        setup::*, entities::*, tick_update_plugin::*, resources::*, click_events_plugin::*
     };
 }

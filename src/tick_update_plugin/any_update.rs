@@ -21,3 +21,11 @@ pub fn update_player_movements(
 pub fn update_ticks(mut ticks: ResMut<Ticks>) {
     ticks.0 += 1;
 }
+
+pub fn update_events(
+    mut grid: ResMut<Grid>,
+    ticks: ResMut<Ticks>,
+    clicked: ResMut<ClickedTimeMachine>
+) {
+    grid.update_events(ticks.0, clicked)
+}

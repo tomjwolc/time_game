@@ -16,7 +16,7 @@ pub struct Box;
 #[derive(Default, Component)]
 pub struct TimeMachine;
 
-#[derive(Default, Component, Debug)]
+#[derive(Default, Component, Debug, Clone)]
 pub struct GridEntityInfo {
     pub variant: &'static str,
     pub id: usize,
@@ -74,38 +74,38 @@ impl GridEntityInfo {
 
 #[derive(Bundle, LdtkEntity)]
 pub struct PlayerBundle {
-    component: Player,
+    pub component: Player,
     #[with(GridEntityInfo::player)]
-    grid_entity: GridEntityInfo,
+    pub grid_entity: GridEntityInfo,
     #[grid_coords]
-    position: GridCoords,
+    pub position: GridCoords,
     #[sprite_sheet_bundle]
     #[bundle]
-    sprite_bundle: SpriteSheetBundle
+    pub sprite_bundle: SpriteSheetBundle
 }
 
 #[derive(Bundle, LdtkEntity)]
 pub struct PastPlayerBundle {
-    component: PastPlayer,
+    pub component: PastPlayer,
     #[with(GridEntityInfo::past_player)]
-    grid_entity: GridEntityInfo,
+    pub grid_entity: GridEntityInfo,
     #[grid_coords]
-    position: GridCoords,
+    pub position: GridCoords,
     #[sprite_sheet_bundle]
     #[bundle]
-    sprite_bundle: SpriteSheetBundle
+    pub sprite_bundle: SpriteSheetBundle
 }
 
 #[derive(Bundle, LdtkEntity)]
 pub struct BoxBundle {
-    component: Box,
+    pub component: Box,
     #[with(GridEntityInfo::box_entity)]
-    grid_entity: GridEntityInfo,
+    pub grid_entity: GridEntityInfo,
     #[grid_coords]
-    position: GridCoords,
+    pub position: GridCoords,
     #[sprite_sheet_bundle]
     #[bundle]
-    sprite_bundle: SpriteSheetBundle
+    pub sprite_bundle: SpriteSheetBundle
 }
 
 #[derive(Default, Component, Debug, Clone, Copy, PartialEq)]
@@ -794,13 +794,14 @@ impl std::str::FromStr for TimeMachinePartType {
 
 #[derive(Bundle, LdtkEntity)]
 pub struct TimeMachinePartBundle {
+    pub component: TimeMachine,
     #[with(TimeMachinePartType::get_type)]
-    part_type: TimeMachinePartType,
+    pub part_type: TimeMachinePartType,
     #[with(GridEntityInfo::time_machine)]
-    grid_entity: GridEntityInfo,
+    pub grid_entity: GridEntityInfo,
     #[grid_coords]
-    position: GridCoords,
+    pub position: GridCoords,
     #[sprite_sheet_bundle]
     #[bundle]
-    sprite_bundle: SpriteSheetBundle
+    pub sprite_bundle: SpriteSheetBundle
 }

@@ -135,6 +135,7 @@ fn expand_connections(x: usize, y: usize, grid: &mut Vec<Vec<Option<(usize, Time
 fn resize_level(
     ldtk_level: Res<Assets<LdtkLevel>>,
     mut ldtk_level_query: Query<(&mut Transform, &Handle<LdtkLevel>)>,
+    mut level_window_info: ResMut<LevelWindowInfo>,
     windows: Res<Windows>
 ) {
     let (mut transform, ldtk_handle) = ldtk_level_query.single_mut();
@@ -144,6 +145,14 @@ fn resize_level(
 
     transform.scale *= scaling_factor;
     transform.translation -= scaling_factor * Vec3::new(level.px_wid as f32, level.px_hei as f32, 0.0) / 2.0;
+
+    *level_window_info = LevelWindowInfo {
+        scaling_factor,
+        offset: (
+            window.width() / 2.0 - scaling_factor * level.px_wid as f32 / 2.0,
+            window.height() / 2.0 - scaling_factor * level.px_hei as f32 / 2.0
+        )
+    }
 }
 
 fn setup_grid(
