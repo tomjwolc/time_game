@@ -1,8 +1,4 @@
-// use crate::prelude::*;
-use bevy::prelude::*;
-use bevy_ecs_ldtk::prelude::*;
-
-use crate::tick_update_plugin::GridEntity;
+use super::*;
 
 #[derive(Default, Component)]
 pub struct Player;
@@ -258,9 +254,11 @@ impl TimeMachinePartType {
             (part_type1, part_type2) if [
                 TimeMachinePartType::MiddleLeftOpen,
                 TimeMachinePartType::BottomLeftTangentTop,
+                TimeMachinePartType::TopPerpLeft
             ].contains(part_type1) && [
                 TimeMachinePartType::MiddleLeftOpen,
                 TimeMachinePartType::TopLeftTangentBottom,
+                TimeMachinePartType::BottomPerpLeft
             ].contains(part_type2) => true,
 
             // Right line connection
@@ -286,9 +284,11 @@ impl TimeMachinePartType {
             (part_type1, part_type2) if [
                 TimeMachinePartType::MiddleRightOpen,
                 TimeMachinePartType::BottomRightTangentTop,
+                TimeMachinePartType::BottomPerpRight
             ].contains(part_type1) && [
                 TimeMachinePartType::MiddleRightOpen,
                 TimeMachinePartType::TopRightTangentBottom,
+                TimeMachinePartType::TopPerpRight
             ].contains(part_type2) => true,
 
             // Whole connection
@@ -364,9 +364,11 @@ impl TimeMachinePartType {
             (part_type1, part_type2) if [
                 TimeMachinePartType::MiddleLeftOpen,
                 TimeMachinePartType::TopLeftTangentBottom,
+                TimeMachinePartType::BottomPerpLeft
             ].contains(part_type1) && [
                 TimeMachinePartType::MiddleLeftOpen,
                 TimeMachinePartType::BottomLeftTangentTop,
+                TimeMachinePartType::TopPerpLeft
             ].contains(part_type2) => true,
 
             // Right line connection
@@ -392,9 +394,11 @@ impl TimeMachinePartType {
             (part_type1, part_type2) if [
                 TimeMachinePartType::MiddleRightOpen,
                 TimeMachinePartType::TopRightTangentBottom,
+                TimeMachinePartType::BottomPerpRight
             ].contains(part_type1) && [
                 TimeMachinePartType::MiddleRightOpen,
                 TimeMachinePartType::BottomRightTangentTop,
+                TimeMachinePartType::TopPerpRight
             ].contains(part_type2) => true,
 
             // Whole connection
@@ -470,9 +474,11 @@ impl TimeMachinePartType {
             (part_type1, part_type2) if [
                 TimeMachinePartType::MiddleTopOpen,
                 TimeMachinePartType::TopRightTangentLeft,
+                TimeMachinePartType::RightPerpTop
             ].contains(part_type1) && [
                 TimeMachinePartType::MiddleTopOpen,
                 TimeMachinePartType::TopLeftTangentRight,
+                TimeMachinePartType::LeftPerpTop
             ].contains(part_type2) => true,
 
             // Bottom line connection
@@ -498,9 +504,11 @@ impl TimeMachinePartType {
             (part_type1, part_type2) if [
                 TimeMachinePartType::MiddleBottomOpen,
                 TimeMachinePartType::BottomRightTangentLeft,
+                TimeMachinePartType::RightPerpBottom
             ].contains(part_type1) && [
                 TimeMachinePartType::MiddleBottomOpen,
                 TimeMachinePartType::BottomLeftTangentRight,
+                TimeMachinePartType::LeftPerpBottom
             ].contains(part_type2) => true,
 
             // Whole connection
@@ -576,9 +584,11 @@ impl TimeMachinePartType {
             (part_type1, part_type2) if [
                 TimeMachinePartType::MiddleTopOpen,
                 TimeMachinePartType::TopLeftTangentRight,
+                TimeMachinePartType::LeftPerpTop
             ].contains(part_type1) && [
                 TimeMachinePartType::MiddleTopOpen,
                 TimeMachinePartType::TopRightTangentLeft,
+                TimeMachinePartType::RightPerpTop
             ].contains(part_type2) => true,
 
             // Bottom line connection
@@ -604,9 +614,11 @@ impl TimeMachinePartType {
             (part_type1, part_type2) if [
                 TimeMachinePartType::MiddleBottomOpen,
                 TimeMachinePartType::BottomLeftTangentRight,
+                TimeMachinePartType::LeftPerpBottom
             ].contains(part_type1) && [
                 TimeMachinePartType::MiddleBottomOpen,
                 TimeMachinePartType::BottomRightTangentLeft,
+                TimeMachinePartType::RightPerpBottom
             ].contains(part_type2) => true,
 
             // Whole connection

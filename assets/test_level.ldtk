@@ -10,7 +10,7 @@
 	},
 	"jsonVersion": "1.1.3",
 	"appBuildId": 458364,
-	"nextUid": 51,
+	"nextUid": 52,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -132,10 +132,10 @@
 			"color": "#DC1818",
 			"renderMode": "Tile",
 			"showName": true,
-			"tilesetId": 26,
-			"tileId": 6,
+			"tilesetId": 38,
+			"tileId": 48,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "tilesetUid": 26, "x": 1536, "y": 0, "w": 256, "h": 256 },
+			"tileRect": { "tilesetUid": 38, "x": 0, "y": 1536, "w": 256, "h": 256 },
 			"nineSliceBorders": [],
 			"maxCount": 0,
 			"limitScope": "PerLevel",
@@ -188,10 +188,10 @@
 			"color": "#1BCA69",
 			"renderMode": "Tile",
 			"showName": true,
-			"tilesetId": 26,
-			"tileId": 18,
+			"tilesetId": 38,
+			"tileId": 49,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "tilesetUid": 26, "x": 512, "y": 512, "w": 256, "h": 256 },
+			"tileRect": { "tilesetUid": 38, "x": 256, "y": 1536, "w": 256, "h": 256 },
 			"nineSliceBorders": [],
 			"maxCount": 0,
 			"limitScope": "PerLevel",
@@ -328,7 +328,7 @@
 			"savedSelections": [],
 			"cachedPixelData": {
 				"opaqueTiles": "0000000000000001000001000000000000000000000000000000000000000000",
-				"averageColors": "c233c233d223d223d222d222d222d222c233c233d223d223c233d223c233f334d223d223c233c233d223f222d2230568d223d223c233c233c233d223c2334444c223c223c223c2239334933400000000c223c223c223c22393349334000000002c2223a62c220000000000000000000000000000000000000000000000000000"
+				"averageColors": "c233c233d223d223d222d222d222d222c233c233d223d223c233d223c233f334d223d223c233c233d223f222d2230568d223d223c233c233c233d223c2334444c223c223c223c2239334933400000000c223c223c223c22393349334000000002a1224841a120000000000000000000000000000000000000000000000000000"
 			}
 		}
 	], "enums": [{ "identifier": "TimeMachineType", "uid": 39, "values": [
@@ -425,7 +425,7 @@
 							"__grid": [2,1],
 							"__pivot": [0,0],
 							"__tags": [],
-							"__tile": { "tilesetUid": 26, "x": 512, "y": 512, "w": 256, "h": 256 },
+							"__tile": { "tilesetUid": 38, "x": 256, "y": 1536, "w": 256, "h": 256 },
 							"__smartColor": "#1BCA69",
 							"iid": "93900c70-7820-11ed-89c6-8fe81a5205f1",
 							"width": 256,
@@ -439,7 +439,7 @@
 							"__grid": [5,2],
 							"__pivot": [0,0],
 							"__tags": [],
-							"__tile": { "tilesetUid": 26, "x": 512, "y": 512, "w": 256, "h": 256 },
+							"__tile": { "tilesetUid": 38, "x": 256, "y": 1536, "w": 256, "h": 256 },
 							"__smartColor": "#1BCA69",
 							"iid": "94470060-7820-11ed-89c6-538c9a4d3e04",
 							"width": 256,
@@ -453,7 +453,7 @@
 							"__grid": [1,4],
 							"__pivot": [0,0],
 							"__tags": [],
-							"__tile": { "tilesetUid": 26, "x": 1536, "y": 0, "w": 256, "h": 256 },
+							"__tile": { "tilesetUid": 38, "x": 0, "y": 1536, "w": 256, "h": 256 },
 							"__smartColor": "#DC1818",
 							"iid": "7b46b4b0-7820-11ed-a3a2-7d990945d225",
 							"width": 256,
@@ -467,7 +467,7 @@
 							"__grid": [1,6],
 							"__pivot": [0,0],
 							"__tags": [],
-							"__tile": { "tilesetUid": 26, "x": 512, "y": 512, "w": 256, "h": 256 },
+							"__tile": { "tilesetUid": 38, "x": 256, "y": 1536, "w": 256, "h": 256 },
 							"__smartColor": "#1BCA69",
 							"iid": "7022c070-7820-11ed-a3a2-91c394ddbadf",
 							"width": 256,
@@ -481,7 +481,7 @@
 							"__grid": [7,7],
 							"__pivot": [0,0],
 							"__tags": [],
-							"__tile": { "tilesetUid": 26, "x": 512, "y": 512, "w": 256, "h": 256 },
+							"__tile": { "tilesetUid": 38, "x": 256, "y": 1536, "w": 256, "h": 256 },
 							"__smartColor": "#1BCA69",
 							"iid": "84033c80-7820-11ed-a3a2-7f38ad10bd21",
 							"width": 256,
@@ -919,7 +919,7 @@
 							"__grid": [4,2],
 							"__pivot": [0,0],
 							"__tags": [],
-							"__tile": { "tilesetUid": 26, "x": 1536, "y": 0, "w": 256, "h": 256 },
+							"__tile": { "tilesetUid": 38, "x": 0, "y": 1536, "w": 256, "h": 256 },
 							"__smartColor": "#DC1818",
 							"iid": "98454600-7820-11ed-a3a2-9bc2778c8a87",
 							"width": 256,
@@ -933,7 +933,7 @@
 							"__grid": [7,5],
 							"__pivot": [0,0],
 							"__tags": [],
-							"__tile": { "tilesetUid": 26, "x": 512, "y": 512, "w": 256, "h": 256 },
+							"__tile": { "tilesetUid": 38, "x": 256, "y": 1536, "w": 256, "h": 256 },
 							"__smartColor": "#1BCA69",
 							"iid": "9e6da8b0-7820-11ed-a3a2-7bca93db770b",
 							"width": 256,
@@ -947,7 +947,7 @@
 							"__grid": [7,2],
 							"__pivot": [0,0],
 							"__tags": [],
-							"__tile": { "tilesetUid": 26, "x": 512, "y": 512, "w": 256, "h": 256 },
+							"__tile": { "tilesetUid": 38, "x": 256, "y": 1536, "w": 256, "h": 256 },
 							"__smartColor": "#1BCA69",
 							"iid": "f1a84810-7820-11ed-a3a2-e757f2d2a8f9",
 							"width": 256,
@@ -961,7 +961,7 @@
 							"__grid": [1,5],
 							"__pivot": [0,0],
 							"__tags": [],
-							"__tile": { "tilesetUid": 26, "x": 512, "y": 512, "w": 256, "h": 256 },
+							"__tile": { "tilesetUid": 38, "x": 256, "y": 1536, "w": 256, "h": 256 },
 							"__smartColor": "#1BCA69",
 							"iid": "31710370-7820-11ed-a3a2-8bbcd518a6aa",
 							"width": 256,
@@ -1177,7 +1177,518 @@
 					]
 				}
 			],
-			"__neighbours": [{ "levelIid": "3b2687d0-7820-11ed-89c6-e71c3bc45528", "levelUid": 0, "dir": "w" }]
+			"__neighbours": [ { "levelIid": "3b2687d0-7820-11ed-89c6-e71c3bc45528", "levelUid": 0, "dir": "w" }, { "levelIid": "04a93ba0-7820-11ed-a3a2-9b7aa0193372", "levelUid": 51, "dir": "e" } ]
+		},
+		{
+			"identifier": "Level_2",
+			"iid": "04a93ba0-7820-11ed-a3a2-9b7aa0193372",
+			"uid": 51,
+			"worldX": 5120,
+			"worldY": 0,
+			"worldDepth": 0,
+			"pxWid": 3072,
+			"pxHei": 3072,
+			"__bgColor": "#2E3B49",
+			"bgColor": null,
+			"useAutoIdentifier": true,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__smartColor": "#8C939B",
+			"__bgPos": null,
+			"externalRelPath": null,
+			"fieldInstances": [],
+			"layerInstances": [
+				{
+					"__identifier": "Interactables",
+					"__type": "Entities",
+					"__cWid": 12,
+					"__cHei": 12,
+					"__gridSize": 256,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "04a9b0d0-7820-11ed-a3a2-9b6a907b5da4",
+					"levelId": 51,
+					"layerDefUid": 11,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 7849705,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": [
+						{
+							"__identifier": "Box",
+							"__grid": [3,3],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 256, "y": 1536, "w": 256, "h": 256 },
+							"__smartColor": "#1BCA69",
+							"iid": "bc7dc7a0-7820-11ed-a3a2-e18ec911b686",
+							"width": 256,
+							"height": 256,
+							"defUid": 10,
+							"px": [768,768],
+							"fieldInstances": []
+						},
+						{
+							"__identifier": "Box",
+							"__grid": [2,9],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 256, "y": 1536, "w": 256, "h": 256 },
+							"__smartColor": "#1BCA69",
+							"iid": "c02ec1b0-7820-11ed-a3a2-c53d09925219",
+							"width": 256,
+							"height": 256,
+							"defUid": 10,
+							"px": [512,2304],
+							"fieldInstances": []
+						},
+						{
+							"__identifier": "Box",
+							"__grid": [9,9],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 256, "y": 1536, "w": 256, "h": 256 },
+							"__smartColor": "#1BCA69",
+							"iid": "c1d6cc60-7820-11ed-a3a2-d97f7a4206ff",
+							"width": 256,
+							"height": 256,
+							"defUid": 10,
+							"px": [2304,2304],
+							"fieldInstances": []
+						},
+						{
+							"__identifier": "Box",
+							"__grid": [4,9],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 256, "y": 1536, "w": 256, "h": 256 },
+							"__smartColor": "#1BCA69",
+							"iid": "c63173f0-7820-11ed-a3a2-3d5602dd2d5d",
+							"width": 256,
+							"height": 256,
+							"defUid": 10,
+							"px": [1024,2304],
+							"fieldInstances": []
+						},
+						{
+							"__identifier": "Player",
+							"__grid": [7,9],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 0, "y": 1536, "w": 256, "h": 256 },
+							"__smartColor": "#DC1818",
+							"iid": "c7d02fd0-7820-11ed-a3a2-b751dca31f31",
+							"width": 256,
+							"height": 256,
+							"defUid": 9,
+							"px": [1792,2304],
+							"fieldInstances": []
+						}
+					]
+				},
+				{
+					"__identifier": "ActiveIndicators",
+					"__type": "Entities",
+					"__cWid": 12,
+					"__cHei": 12,
+					"__gridSize": 256,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "04a9d7e0-7820-11ed-a3a2-6de374ad2a09",
+					"levelId": 51,
+					"layerDefUid": 48,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 436742,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": []
+				},
+				{
+					"__identifier": "Time_machines",
+					"__type": "Entities",
+					"__cWid": 12,
+					"__cHei": 12,
+					"__gridSize": 256,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "04a9d7e1-7820-11ed-a3a2-9f92a8db301b",
+					"levelId": 51,
+					"layerDefUid": 29,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 2322988,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": [
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [1,1],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1024, "y": 256, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "1bbe32f0-7820-11ed-a3a2-1d3c0363191e",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [256,256],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "TopLeftFull", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1024, "y": 256, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["TopLeftFull"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [2,1],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1280, "y": 256, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "1d905ae0-7820-11ed-a3a2-3515816da7cc",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [512,256],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "TopFull", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1280, "y": 256, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["TopFull"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [3,1],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1280, "y": 256, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "1ffc51d0-7820-11ed-a3a2-3f74971ffc64",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [768,256],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "TopFull", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1280, "y": 256, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["TopFull"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [4,1],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 768, "y": 1024, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "21d7a180-7820-11ed-a3a2-f3d10bbbc505",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [1024,256],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "TopPerpRight", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 768, "y": 1024, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["TopPerpRight"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [1,2],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1024, "y": 512, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "266df280-7820-11ed-a3a2-4b52cbe9df2e",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [256,512],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "LeftFull", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1024, "y": 512, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["LeftFull"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [1,3],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1024, "y": 512, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "2938ab40-7820-11ed-a3a2-57d6104ed644",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [256,768],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "LeftFull", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1024, "y": 512, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["LeftFull"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [1,4],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1024, "y": 768, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "2b19ee60-7820-11ed-a3a2-c508f5bbbe60",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [256,1024],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "BottomLeftFull", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1024, "y": 768, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["BottomLeftFull"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [2,4],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1280, "y": 768, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "2f6c3180-7820-11ed-a3a2-fbff8a9c3b6d",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [512,1024],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "BottomFull", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1280, "y": 768, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["BottomFull"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [3,4],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1280, "y": 768, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "31cc1a80-7820-11ed-a3a2-413f345b7a3a",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [768,1024],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "BottomFull", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1280, "y": 768, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["BottomFull"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [4,4],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 768, "y": 1280, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "34126100-7820-11ed-a3a2-f38308165c0a",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [1024,1024],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "BottomPerpRight", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 768, "y": 1280, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["BottomPerpRight"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [4,3],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1792, "y": 0, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "49406fe0-7820-11ed-a3a2-cfd5f29e55b5",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [1024,768],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "MiddleRightOpen", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1792, "y": 0, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["MiddleRightOpen"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [4,2],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1792, "y": 0, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "4d952400-7820-11ed-a3a2-97d8a0c91185",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [1024,512],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "MiddleRightOpen", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1792, "y": 0, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["MiddleRightOpen"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [3,2],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1280, "y": 512, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "509348d0-7820-11ed-a3a2-bd090b6a7c14",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [768,512],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "Middle", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1280, "y": 512, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Middle"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [2,2],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1280, "y": 512, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "5349b640-7820-11ed-a3a2-d9d13260726f",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [512,512],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "Middle", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1280, "y": 512, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Middle"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [2,3],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1280, "y": 512, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "5730db80-7820-11ed-a3a2-11d975a61444",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [512,768],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "Middle", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1280, "y": 512, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Middle"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [3,3],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 1280, "y": 512, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "5926b810-7820-11ed-a3a2-bd4b1b712b02",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [768,768],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "Middle", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 1280, "y": 512, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Middle"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [7,2],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 0, "y": 0, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "82c7c330-7820-11ed-a3a2-bd7ecee2ecc5",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [1792,512],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "TopLeftTangentRight", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 0, "y": 0, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["TopLeftTangentRight"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [7,3],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 0, "y": 1280, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "8dbd1740-7820-11ed-a3a2-2570dc96eef3",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [1792,768],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "LeftPerpBottom", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 0, "y": 1280, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["LeftPerpBottom"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [8,2],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 256, "y": 1024, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "a45f4f90-7820-11ed-a3a2-bdf88ff291d2",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [2048,512],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "RightPerpTop", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 256, "y": 1024, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["RightPerpTop"]
+							}] }]
+						},
+						{
+							"__identifier": "Time_machine_part",
+							"__grid": [8,3],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 38, "x": 256, "y": 256, "w": 256, "h": 256 },
+							"__smartColor": "#164BD1",
+							"iid": "b0fb27b0-7820-11ed-a3a2-e7c00a826752",
+							"width": 256,
+							"height": 256,
+							"defUid": 40,
+							"px": [2048,768],
+							"fieldInstances": [{ "__identifier": "TimeMachineType", "__value": "BottomRightTangentLeft", "__type": "LocalEnum.TimeMachineType", "__tile": { "tilesetUid": 38, "x": 256, "y": 256, "w": 256, "h": 256 }, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["BottomRightTangentLeft"]
+							}] }]
+						}
+					]
+				}
+			],
+			"__neighbours": [{ "levelIid": "32fdb110-7820-11ed-a3a2-95d9bbfa9fb9", "levelUid": 50, "dir": "w" }]
 		}
 	],
 	"worlds": []

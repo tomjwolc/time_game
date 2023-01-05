@@ -21,18 +21,17 @@ impl Plugin for LevelSetupPlugin {
                 .with_system(setup_time_machine_parts)
                 .with_system(resize_level)
                 .into()
-            )/*.add_system(
-                setup_time_machine_grid
-                .run_if(level_setup_ready)
-                .after("pre_grid_setup")
-            )*/.add_system(
+            ).add_system(
                 setup_grid
                 .run_if(level_setup_ready)
                 .after("pre_grid_setup")
                 .before("end_level_setup")
                 .label("grid_setup")
+            ).add_system(
+                end_level_setup
+                .run_if(level_setup_ready)
+                .label("end_level_setup")
             )
-            .add_system(end_level_setup.run_if(level_setup_ready).label("end_level_setup"))
         ;
     }
 }

@@ -51,8 +51,6 @@ pub fn player_movement(
     if let Ok(grid_entity_info) = query.get_single_mut() {
         let direction = key_event.to_direction().unwrap();
         
-        if grid.try_move_entity(grid_entity_info, direction) {
-            println!("grid:{}", *grid);
-        }
+        grid.try_move_entity(grid_entity_info, direction);
     }
 }

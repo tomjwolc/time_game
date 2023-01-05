@@ -13,7 +13,7 @@ pub enum GridEntity {
         id: usize
     },
     TimeMachine {
-        start_instance: Option<(usize, Option<usize>, Grid)>,
+        start_instance: Option<(usize, Option<usize>, Option<usize>, Grid)>,
         id: usize, 
         grid: Vec<Vec<(TimeMachinePartType, usize)>>
     },
@@ -178,7 +178,7 @@ impl GridEntity {
 
                 for row in grid {
                     for (_, index) in row {
-                        if *index != 0 && !contents.contains( index ) {
+                        if entities[ *index ].1 != GridEntity::None && !contents.contains( index ) {
                             contents.push( *index );
                             contents = [
                                 contents,
@@ -248,46 +248,116 @@ impl GridEntity {
         }
     }
 
-    pub fn spawn_bundle(&self, corner: (usize, usize), commands: &mut Commands) {
+    pub fn spawn_bundle(
+        &self, 
+        corner: (usize, usize), 
+        commands: &mut Commands, 
+        text_atlases: &mut Assets<TextureAtlas>, 
+        asset_server: &Res<AssetServer>,
+        bevy_level_entity: Entity
+    ) {
         match self {
             GridEntity::PastPlayer { id, .. } => {
-                commands.spawn(PastPlayerBundle {
-                    component: PastPlayer,
-                    position: GridCoords::new(corner.0 as i32, corner.1 as i32),
-                    grid_entity: GridEntityInfo {
-                        variant: "PastPlayer",
-                        id: *id,
-                        ..Default::default()
-                    },
-                    sprite_bundle: SpriteSheetBundle { ..Default::default() },
+                commands.entity(bevy_level_entity).with_children(|parent| {
+                    parent.spawn(PastPlayerBundle {
+                        component: PastPlayer,
+                        position: GridCoords::new(corner.0 as i32, corner.1 as i32),
+                        grid_entity: GridEntityInfo {
+                            variant: "PastPlayer",
+                            id: *id,
+                            ..Default::default()
+                        },
+                        sprite_bundle: SpriteSheetBundle { 
+                            sprite: TextureAtlasSprite {
+                                index: 50,
+                                ..Default::default()
+                            },
+                            texture_atlas: text_atlases.add(TextureAtlas::from_grid(
+                                asset_server.load("tileset_alt.png").into(), 
+                                Vec2::new(256.0, 256.0), 
+                                8, 
+                                8, 
+                                None, 
+                                None
+                            )),
+                            transform: Transform::from_xyz(
+                                (TILE_SIZE * corner.0 + TILE_SIZE / 2) as f32,
+                                (TILE_SIZE * corner.1 + TILE_SIZE / 2) as f32, 
+                                0.0
+                            ),
+                            ..Default::default() 
+                        },
+                    });
                 });
             },
             GridEntity::Box { id, .. } => {
-                commands.spawn(BoxBundle {
-                    component: Box,
-                    position: GridCoords::new(corner.0 as i32, corner.1 as i32),
-                    grid_entity: GridEntityInfo {
-                        variant: "Box",
-                        id: *id,
-                        ..Default::default()
-                    },
-                    sprite_bundle: SpriteSheetBundle { ..Default::default() },
+                commands.entity(bevy_level_entity).with_children(|parent| {
+                    parent.spawn(BoxBundle {
+                        component: Box,
+                        position: GridCoords::new(corner.0 as i32, corner.1 as i32),
+                        grid_entity: GridEntityInfo {
+                            variant: "Box",
+                            id: *id,
+                            ..Default::default()
+                        },
+                        sprite_bundle: SpriteSheetBundle { 
+                            sprite: TextureAtlasSprite {
+                                index: 49,
+                                ..Default::default()
+                            },
+                            texture_atlas: text_atlases.add(TextureAtlas::from_grid(
+                                asset_server.load("tileset_alt.png").into(), 
+                                Vec2::new(256.0, 256.0), 
+                                8, 
+                                8, 
+                                None, 
+                                None
+                            )),
+                            transform: Transform::from_xyz(
+                                (TILE_SIZE * corner.0 + TILE_SIZE / 2) as f32,
+                                (TILE_SIZE * corner.1 + TILE_SIZE / 2) as f32, 
+                                0.0
+                            ),
+                            ..Default::default() 
+                        },
+                    });
                 });
             },
             GridEntity::TimeMachine { id, grid, .. } => {
                 for i in 0..grid.len() {
                     for j in 0..grid[i].len() {
-                        commands.spawn(TimeMachinePartBundle {
-                            component: TimeMachine,
-                            part_type: grid[i][j].0,
-                            position: GridCoords::new(corner.0 as i32, corner.1 as i32),
-                            grid_entity: GridEntityInfo {
-                                variant: "PastPlayer",
-                                id: *id,
-                                pos: (i, j),
-                                ..Default::default()
-                            },
-                            sprite_bundle: SpriteSheetBundle { ..Default::default() },
+                        commands.entity(bevy_level_entity).with_children(|parent| {
+                            parent.spawn(TimeMachinePartBundle {
+                                component: TimeMachine,
+                                position: GridCoords::new((corner.0 + i)as i32, (corner.1 + j) as i32),
+                                part_type: grid[i][j].0,
+                                grid_entity: GridEntityInfo {
+                                    variant: "TimeMachine",
+                                    id: *id,
+                                    pos: (i, j),
+                                    ..Default::default()
+                                },
+                                sprite_bundle: SpriteSheetBundle { 
+                                    sprite: TextureAtlasSprite {
+                                        index: 36,
+                                        ..Default::default()
+                                    },
+                                    texture_atlas: text_atlases.add(TextureAtlas::from_grid(
+                                        asset_server.load("tileset_alt.png").into(), 
+                                        Vec2::new(256.0, 256.0), 
+                                        8, 
+                                        8, 
+                                        None, 
+                                        None
+                                    )),
+                                    transform: Transform::from_xyz(
+                                        (TILE_SIZE * (corner.0 + i) + TILE_SIZE / 2) as f32,
+                                        (TILE_SIZE * (corner.1 + j) + TILE_SIZE / 2) as f32, 
+                                        0.0
+                                    ),
+                                    ..Default::default() 
+                                },
+                            });
                         });
                     }
                 }
@@ -299,7 +369,6 @@ impl GridEntity {
 
 #[derive(Resource, Debug, PartialEq, Clone)]
 pub struct Grid {
-    ghost_player_num: usize,
     entities: Vec<((usize, usize), GridEntity)>,
     entity_grid: Vec<Vec<usize>>
 }
@@ -307,7 +376,6 @@ pub struct Grid {
 impl Grid {
     pub fn new() -> Self {
         Self {
-            ghost_player_num: 0,
             entities: vec![((0, 0), GridEntity::None)],
             entity_grid: Vec::new()
         }
@@ -315,7 +383,6 @@ impl Grid {
 
     pub fn new_sized(width: usize, height: usize) -> Self {
         Self {
-            ghost_player_num: 0,
             entities: vec![((0, 0), GridEntity::None)],
             entity_grid: vec![vec![0; height]; width]
         }
@@ -516,17 +583,17 @@ impl Grid {
     }
 
     // !!Assumes that player is in the time machine!!
-    pub fn replace_time_machine(&mut self, mut new_grid: Grid, time_machine_index: usize, t: usize) {
-        println!("\n0.) {}\npast: {}","-".repeat(30) , self);
+    pub fn replace_time_machine(&mut self, mut new_grid: Grid, time_machine_index: usize, t: usize, end_t: usize) {
+        // println!("\n0.) {}\npast: {}","-".repeat(30) , self);
         
         let player_index = self.get_entity_index_from_id("Player", 0).unwrap();
 
         // replace player with past_player
         self.replace_player_to_pos(
-            if let (_, GridEntity::Player { movements }) = &new_grid.entities[ player_index ] {
+            if let Some((_, GridEntity::Player { movements })) = &new_grid.get_entity_from_id("Player", 0) {
                 movements[t..].to_vec()
             } else {
-                panic!("Could not find player (should be unreachable)")
+                panic!("Player index did index player (should be unreachable) index: {}, grid: {}", player_index, new_grid);
             }, 
             new_grid.get_entity_from_id("Player", 0).unwrap().0
         );
@@ -534,7 +601,7 @@ impl Grid {
         // Remove the old player reference
         self.entities[ player_index ] = ((0, 0), GridEntity::None);
 
-        println!("\n1.) {}\npast: {}","-".repeat(30) , self);
+        // println!("\n1.) {}\npast: {}","-".repeat(30) , self);
 
         let (old_corner, ref old_tm_entity) = self.entities[ time_machine_index ];
         let old_contents = old_tm_entity.get_contents(&self.entities);
@@ -542,20 +609,26 @@ impl Grid {
         let (new_corner, ref new_tm_entity) = new_grid.entities[ time_machine_index ];
         let new_contents = new_tm_entity.get_contents(&new_grid.entities);
 
-        println!("\n\nnew_contents: {:?}\nold_contents: {:?}\n\n", new_contents, old_contents);
+        // println!("\n\nnew_contents: {:?}\nold_contents: {:?}\n\n", new_contents, old_contents);
 
         // Add the stuff that is new in the time machine and
         // Change the stuff that was cloned via the time machine
         for &index in new_contents.iter() {
             if self.entities.get( index ).is_none() {
                 let new_index = self.num_entities();
+                let pos = new_grid.entities[ index ].0;
 
                 new_grid.change_all_indeces(index, new_index);
                 self.entities.push(std::mem::take(&mut new_grid.entities[ index ]));
+                // println!("{:?} - {:?} + {:?}", new_grid.entities[ new_index ].0, new_corner, old_corner);
+
+                if pos.0 < new_corner.0 {
+                    println!("index: {}\nnew_index: {}\nentity: {:?}\nnew_corner: {:?}", index, new_index, self.entities.last(), new_corner);
+                }
 
                 self.entities[ new_index ].0 = (
-                    new_grid.entities[ new_index ].0.0 - new_corner.0 + old_corner.0,
-                    new_grid.entities[ new_index ].0.1 - new_corner.1 + old_corner.1
+                    (pos.0 - new_corner.0) + old_corner.0,
+                    (pos.1 - new_corner.1) + old_corner.1
                 );
             } else if !old_contents.contains( &index ) {
                 let new_index = self.num_entities();
@@ -564,19 +637,21 @@ impl Grid {
                 self.entities.push(new_entity.clone());
                 new_grid.entities.push(new_entity);
 
-                println!("from_index: {}, to_index: {}, grid: {}", index, new_index, self);
+                // println!("from_index: {}, to_index: {}, grid: {}", index, new_index, self);
 
                 new_grid.change_all_indeces(index, new_index);
             }
         }
 
-        println!("\n2.) {}\npast: {}","-".repeat(30) , self);
+        // println!("\n2.) {}\npast: {}","-".repeat(30) , self);
         
         // Delete the stuff that was overided by the new time machine and
         // update the position of the stuff that stayed in the time machine
         for &index in old_contents.iter() {
             if new_contents.contains( &index ) { // Updating posititon
-                println!("new_grid_entity: {:?}, new_corner: {:?}, old_corner: {:?}", new_grid.entities[ index ].0, new_corner, old_corner);
+                // println!("new_grid_entity: {:?}, new_corner: {:?}, old_corner: {:?}", new_grid.entities[ index ].0, new_corner, old_corner);
+                
+                // println!("{:?} - {:?} + {:?}", new_grid.entities[ index ].0, new_corner, old_corner);
                 self.entities[ index ].0 = (
                     (new_grid.entities[ index ].0.0 - new_corner.0) + old_corner.0,
                     (new_grid.entities[ index ].0.1 - new_corner.1) + old_corner.1
@@ -586,11 +661,27 @@ impl Grid {
             }
         }
 
-        println!("\n3.) {}\npast: {}","-".repeat(30) , self);
+        // println!("\n3.) {}\npast: {}","-".repeat(30) , self);
 
         self.entities[ time_machine_index ].1 = new_grid.entities.remove(time_machine_index).1;
 
-        println!("\n4.) {}\npast: {}","-".repeat(30) , self);
+        // Sets the activation time for the time machine
+        if let (_, GridEntity::TimeMachine { 
+            start_instance: Some((_, Some(length), Some(end), _)), 
+            .. 
+        }) = &mut self.entities[ time_machine_index ] {
+            *end += *length;
+
+        } else if let (_, GridEntity::TimeMachine { 
+            start_instance: Some((_, length, end, _)), 
+            .. 
+        }) = &mut self.entities[ time_machine_index ] {
+            // *start = end_t;
+            *length = Some(end_t - t);
+            *end = Some(2 * end_t - t);
+        }
+
+        // println!("\n4.) {}\npast: {}","-".repeat(30) , self);
     }
 
     pub fn replace_player_to_pos(&mut self, movements: Vec<IVec2>, pos: (usize, usize)) {
@@ -598,7 +689,7 @@ impl Grid {
             .get_entity_index_from_id("Player", 0)
             .expect("Could not find player in grid");
 
-        println!("movements: {:?}, player_index: {}", movements, player_index);
+        // println!("movements: {:?}, player_index: {}", movements, player_index);
 
         let past_player = GridEntity::PastPlayer {
             movements: movements.clone(),
@@ -637,36 +728,66 @@ impl Grid {
         }
     }
 
-    pub fn update_events(&mut self, t: usize, mut clicked: ResMut<ClickedTimeMachine>) {
+    pub fn update_events(&mut self, t: usize, clicked: &mut ClickedTimeMachine) {
+        println!("t: {}", t);
+
         for i in 0..self.entities.len() {
             let stuff = match &mut self.entities[ i ].1 {
                 GridEntity::PastPlayer { movements, .. } => {
                     (Some(movements.clone()), None)
                 },
-                GridEntity::TimeMachine { start_instance: Some((_, Some(departure_time), _)), .. } => {
+                GridEntity::TimeMachine { start_instance: Some((_, _, Some(departure_time), _)), .. } => {
                     (None, Some(*departure_time))
                 },
                 _ => {(None, None)}
             };
 
             if let (Some(mut movements), _) = stuff {
+                // println!("past_player: {:?}", movements);
+
                 if movements.len() == 0 { return; }
 
                 let movement = movements.remove(0);
 
                 if movement.to_array() != [0, 0] {
-                    self.try_move(i, MoveDirection::from_ivec(movement));
+                    println!("{}", self.try_move(i, MoveDirection::from_ivec(movement)));
                 }
 
                 if let GridEntity::PastPlayer { movements: old_movements, .. } = &mut self.entities[ i ].1 { 
-                    *old_movements = movements 
+                    *old_movements = movements;
+                    // println!("movements now: {:?}", old_movements);
                 }
+
+                // println!("{}", self);
             } else if let (_, Some(departure_time)) = stuff {
-                if t == departure_time {
+                println!("departure_time: {}", departure_time);
+                if t >= departure_time {
                     clicked.0 = Some(GridEntityInfo::from(&self.entities[ i ].1))
                 }
             }
         }
+    }
+
+    pub fn add_movement(&mut self, movement: IVec2) {
+        // println!("add_movement (start): {}", self);
+
+        for i in 0..self.entities.len() {
+            let movements_opt = match &mut self.entities[ i ].1 {
+                GridEntity::Player { movements, .. } => {
+                    Some(movements)
+                },
+                GridEntity::PastPlayer { movements, .. } => {
+                    Some(movements)
+                },
+                _ => {None}
+            };
+
+            if let Some(movements) = movements_opt {
+                movements.push(movement);
+            }
+        }
+
+        // println!("add_movement (end): {}", self);
     }
 
     pub fn try_move(&mut self, entity_index: usize, direction: MoveDirection) -> bool {
@@ -756,6 +877,14 @@ impl Grid {
         self.entities[ index ] = ((0, 0), GridEntity::None);
     }
 
+    pub fn remove_contents_of_entity(&mut self, grid_entity_info: &GridEntityInfo) {
+        let contents = self.get_entity(grid_entity_info).unwrap().1.get_contents(&self.entities);
+
+        for index in contents {
+            self.entities[index] = ((0, 0), GridEntity::None);
+        }
+    }
+
     pub fn entities_iter(&self) -> core::slice::Iter<((usize, usize), GridEntity)> {
         self.entities.iter()
     }
@@ -765,16 +894,16 @@ impl std::fmt::Display for GridEntity {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Player { movements } => {
-                if movements.len() == 0 {
-                    write!(f, "Player: []")
+                if true || movements.len() == 0 {
+                    write!(f, "Player: [..]")
                 } else {
                     write!(f, "Player: [{}\n        ]", 
                         movements.iter().fold(String::new(), |string, movement| format!("{}\n            {},", string, movement))
                     )
                 }
             }, Self::PastPlayer { movements, id } => {
-                if movements.len() == 0 {
-                    write!(f, "PastPlayer[{}]: []", id)
+                if true || movements.len() == 0 {
+                    write!(f, "PastPlayer[{}]: [..]", id)
                 } else {
                     write!(f, "PastPlayer[{}]: [{}\n        ]", id,
                         movements.iter().fold(String::new(), |string, movement| format!("{}\n            {},", string, movement))
@@ -799,11 +928,9 @@ impl std::fmt::Display for Grid {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "\
             {{\n    \
-                Number of Ghost Players: {}\n    \
                 Entities: [{}\n    ],\n    \
                 Grid: [{}\n    ]\n\
             }}", 
-            self.ghost_player_num,
             self.entities.iter().enumerate().fold(String::new(), |string, (i, (pos, entity))| format!("{}\n        [{}] @ {:?} -> {},", string, i, pos, entity)), 
             self.entity_grid.iter().fold(String::new(), |string, row| {
                 format!("{}\n        [{}  ],", string, row.iter().fold(String::new(), |string, num| format!("{} {:2}", string, num)))

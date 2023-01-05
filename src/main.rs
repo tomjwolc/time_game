@@ -28,8 +28,7 @@ fn main() {
         .add_plugin(LdtkPlugin)
 
         .add_plugin(LevelSetupPlugin)
-        .add_plugin(TickUpdatePlugin)
-        .add_plugin(ClickEventsPlugin)
+        .add_plugin(EventsPlugin)
 
         .insert_resource(LevelWindowInfo { scaling_factor: 1.0, offset: (0.0, 0.0) })
         .insert_resource(Ticks(0))
@@ -37,7 +36,7 @@ fn main() {
         .insert_resource(Grid::new())
 
         .insert_resource(ClearColor(Color::hex("1E2B39").unwrap()))
-        .insert_resource(LevelSelection::Index(1))
+        .insert_resource(LevelSelection::Index(2))
         .insert_resource(LdtkSettings {
             level_background: LevelBackground::Nonexistent,
             ..Default::default()
@@ -58,12 +57,11 @@ fn main() {
 
 pub mod setup;
 pub mod entities;
-pub mod tick_update_plugin;
+pub mod events_plugin;
 pub mod resources;
-pub mod click_events_plugin;
 
 pub mod prelude {
     pub use super::{
-        setup::*, entities::*, tick_update_plugin::*, resources::*, click_events_plugin::*
+        setup::*, entities::*, resources::*, events_plugin::*
     };
 }
